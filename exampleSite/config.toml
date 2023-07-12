@@ -1,7 +1,7 @@
 ######################## default configuration ####################
-baseURL = "https://demo.gethugothemes.com/liva/examplesite/"
+baseURL = "https://ephemeral-trifle-791c66.netlify.app/"
 languageCode = "en-us"
-title = "Liva | Personal blog template"
+title = "Innovation Tech Junction | Technology blog"
 theme = "liva-hugo"
 summaryLength = "10"
 paginate = 6
@@ -81,16 +81,16 @@ weight = 3
 logo = "images/logo.png"
 home = "Home"
 # Meta data
-description = "This is meta description"
-author = "Themefisher"
+description = "Stay up-to-date with the latest advancements in technology and explore insightful articles on our technology blog. Discover cutting-edge innovations, expert insights, and practical tips for navigating the digital world. Unleash your curiosity and delve into the ever-evolving realm of tech."
+author = "Innovation Tech Junction"
 # Google Analitycs
 googleAnalitycsID = "Your ID"
 # Contact Information
-mobile = "0124857985320"
-email = "demo@email.com"
-location = "Dhaka, Bangladedsh"
+mobile = ""
+email = ""
+location = "Universe"
 # copyright
-copyright = "| copyright &copy; 2021 [Themefisher](https://themefisher.com/hugo-themes/) All Rights Reserved |"
+copyright = "| copyright &copy; 2023 Innovation Tech Junction All Rights Reserved |"
 
 # Preloader
 [params.preloader]
@@ -103,7 +103,7 @@ enable = true
 
 ############################ news letter ########################
 [params.newsletter]
-enable = true
+enable = false
 title = "Join Our Newsletter"
 content = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero"
 
@@ -115,27 +115,3 @@ expire_days = 2
 
 
 ############################# social site ########################
-[[params.social]]
-title = "facebook"
-icon = "ti-facebook" # themify icon : https://themify.me/themify-icons
-link = "#"
-
-[[params.social]]
-title = "twitter"
-icon = "ti-twitter-alt" # themify icon : https://themify.me/themify-icons
-link = "#"
-
-[[params.social]]
-title = "instagram"
-icon = "ti-instagram" # themify icon : https://themify.me/themify-icons
-link = "#"
-
-[[params.social]]
-title = "github"
-icon = "ti-github" # themify icon : https://themify.me/themify-icons
-link = "#"
-
-[[params.social]]
-title = "linkedin"
-icon = "ti-linkedin" # themify icon : https://themify.me/themify-icons
-link = "#"
