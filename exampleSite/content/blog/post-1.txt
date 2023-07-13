@@ -1,7 +1,7 @@
 generate an article about technology for a blog, the output must be in the follow format:
 ---
 title: "title goes here"
-date: date goes here
+date: date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
 draft: false
 
 # meta description
