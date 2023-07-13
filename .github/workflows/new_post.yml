@@ -15,7 +15,7 @@ jobs:
       run: curl -L -o chatgpt https://github.com/kardolus/chatgpt-cli/releases/download/v1.3.1/chatgpt-linux-amd64 && chmod +x chatgpt && sudo mv chatgpt /usr/local/bin/
 
     - name: Run check
-      run: ./gen_post.sh
+      run: OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} ./gen_post.sh
       
     - uses: EndBug/add-and-commit@v9
       with:
