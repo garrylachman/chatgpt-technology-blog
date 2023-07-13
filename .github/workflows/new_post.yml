@@ -1,0 +1,25 @@
+name: New Post
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: curl -L -o chatgpt https://github.com/kardolus/chatgpt-cli/releases/download/v1.3.1/chatgpt-linux-amd64 && chmod +x chatgpt && sudo mv chatgpt /usr/local/bin/
+
+    - name: Run check
+      run: ./gen_post.sh
+      
+    - uses: EndBug/add-and-commit@v9
+      with:
+        add: "exampleSite/content/blog"
+        message: "new post"
+        
+      
