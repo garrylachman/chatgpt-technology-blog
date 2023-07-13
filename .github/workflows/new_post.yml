@@ -14,7 +14,7 @@ jobs:
     - name: Install dependencies
       run: curl -L -o chatgpt https://github.com/kardolus/chatgpt-cli/releases/download/v1.3.1/chatgpt-linux-amd64 && chmod +x chatgpt && sudo mv chatgpt /usr/local/bin/
 
-    - name: Run check
+    - name: OPEN AI
       run: OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} ./gen_post.sh
       
     - uses: EndBug/add-and-commit@v9
