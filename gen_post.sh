@@ -11,3 +11,21 @@ echo $TITLE
 SLUG=$(slugify "$TITLE")
 echo $SLUG
 mv tmp.md $SLUG.md
+
+cat post-programing.txt | chatgpt "." > tmp.md
+TITLE=$(sed '2q;d' tmp.md)
+TITLE=$(echo "${TITLE/title: \"/}")
+TITLE=$(echo "${TITLE/\"/}")
+echo $TITLE
+SLUG=$(slugify "$TITLE")
+echo $SLUG
+mv tmp.md $SLUG.md
+
+cat post-tech.txt | chatgpt "." > tmp.md
+TITLE=$(sed '2q;d' tmp.md)
+TITLE=$(echo "${TITLE/title: \"/}")
+TITLE=$(echo "${TITLE/\"/}")
+echo $TITLE
+SLUG=$(slugify "$TITLE")
+echo $SLUG
+mv tmp.md $SLUG.md

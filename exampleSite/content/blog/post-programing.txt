@@ -1,4 +1,4 @@
-generate an article about SEO for a blog, the output must be in the follow format:
+generate an article about programing for a blog, the output must be in the follow format:
 ---
 title: "title goes here"
 date: date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
