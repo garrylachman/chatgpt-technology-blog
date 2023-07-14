@@ -1,5 +1,5 @@
 ######################## default configuration ####################
-baseURL = "https://ephemeral-trifle-791c66.netlify.app/"
+baseURL = "https://innovation-tech-junction.co/"
 languageCode = "en-us"
 title = "Innovation Tech Junction | Technology blog"
 theme = "liva-hugo"
