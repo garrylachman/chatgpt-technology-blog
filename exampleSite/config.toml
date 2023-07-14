@@ -3,8 +3,8 @@ baseURL = "https://innovation-tech-junction.co/"
 languageCode = "en-us"
 title = "Innovation Tech Junction | Technology blog"
 theme = "liva-hugo"
-summaryLength = "10"
-paginate = 6
+summaryLength = "15"
+paginate = 10
 disqusShortname = "https-innovation-tech-junction-co"
 
 [outputs]
