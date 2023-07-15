@@ -1,4 +1,5 @@
 ######################## default configuration ####################
+[site]
 baseURL = "https://innovation-tech-junction.co"
 languageCode = "en-us"
 title = "Innovation Tech Junction"
