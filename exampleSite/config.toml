@@ -81,6 +81,7 @@ weight = 3
 
 #################### default parameters ################################
 [params]
+baseURL = "https://innovation-tech-junction.co/"
 logo = "images/logo.png"
 home = "Home"
 # Meta data
