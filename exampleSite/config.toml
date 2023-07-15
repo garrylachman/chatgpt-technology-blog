@@ -6,6 +6,7 @@ theme = "liva-hugo"
 summaryLength = "15"
 paginate = 10
 disqusShortname = "https-innovation-tech-junction-co"
+enableRobotsTXT = true
 
 [outputs]
 home = ["HTML", "RSS", "JSON"]
