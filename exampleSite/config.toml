@@ -1,5 +1,5 @@
 ######################## default configuration ####################
-baseURL = "https://innovation-tech-junction.co/"
+baseURL = "https://innovation-tech-junction.co"
 languageCode = "en-us"
 title = "Innovation Tech Junction"
 theme = "liva-hugo"
@@ -81,7 +81,6 @@ weight = 3
 
 #################### default parameters ################################
 [params]
-baseURL = "https://innovation-tech-junction.co/"
 logo = "images/logo.png"
 home = "Home"
 # Meta data
