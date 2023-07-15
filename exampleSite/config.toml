@@ -7,6 +7,8 @@ summaryLength = "15"
 paginate = 10
 disqusShortname = "https-innovation-tech-junction-co"
 enableRobotsTXT = true
+canonifyURLs = true
+relativeURLs = false
 
 [outputs]
 home = ["HTML", "RSS", "JSON"]
