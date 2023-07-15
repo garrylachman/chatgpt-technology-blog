@@ -91,7 +91,7 @@ mobile = ""
 email = ""
 location = "Universe"
 # copyright
-copyright = "| copyright &copy; 2023 Innovation Tech Junction All Rights Reserved |"
+copyright = "| copyright &copy; 2023 Innovation Tech Junction All Rights Reserved"
 
 # Preloader
 [params.preloader]
