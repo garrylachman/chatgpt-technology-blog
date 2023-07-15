@@ -3,7 +3,7 @@
   <title>{{ .Title | truncate 40 }} | {{ .Site.Title }}</title>
 
   {{ "<!-- mobile responsive meta -->" | safeHTML }}
-  <meta name="baseurl" content="{{ .BaseURL }}">
+  <meta name="baseurl" content="{{ .Site.BaseURL }}">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}">
   {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
