@@ -1,7 +1,7 @@
 ######################## default configuration ####################
 baseURL = "https://innovation-tech-junction.co/"
 languageCode = "en-us"
-title = "Innovation Tech Junction | Technology blog"
+title = "Innovation Tech Junction"
 theme = "liva-hugo"
 summaryLength = "15"
 paginate = 10
