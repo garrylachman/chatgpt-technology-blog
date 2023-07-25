@@ -1,4 +1,4 @@
-write a blog post about mobile (android/iphone), the output must be in the follow format:
+write a blog post about mobile (android or iphone), the output must be in the follow format:
 ---
 title: "title goes here"
 date: today's date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
