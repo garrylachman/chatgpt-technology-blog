@@ -1,7 +1,7 @@
-generate an article about mobile or android or iphone or ios for a blog, the output must be in the follow format:
+write a blog post about mobile or android or iphone for a blog technology blog, the output must be in the follow format:
 ---
 title: "title goes here"
-date: date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
+date: current date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
 draft: false
 
 # meta description
