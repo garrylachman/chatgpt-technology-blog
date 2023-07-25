@@ -1,7 +1,7 @@
-write a blog post about programing / software development for a blog technology blog, the output must be in the follow format:
+write a blog post about programing / software development (java/typescript/c++/python/ruby/javascript/c#), the output must be in the follow format:
 ---
 title: "title goes here"
-date: current date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
+date: today's date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
 draft: false
 
 # meta description

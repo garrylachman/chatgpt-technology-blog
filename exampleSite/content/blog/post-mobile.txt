@@ -1,7 +1,7 @@
-write a blog post about mobile or android or iphone for a blog technology blog, the output must be in the follow format:
+write a blog post about mobile (android/iphone), the output must be in the follow format:
 ---
 title: "title goes here"
-date: current date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
+date: today's date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
 draft: false
 
 # meta description
