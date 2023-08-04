@@ -1,4 +1,4 @@
-write a uniqe blog post about SEO. provide examples, tutrials and tricks. the output must be in the follow format:
+write a uniqe blog post about programing / software development in one of the follow languages: java, typescript, c++, python, ruby, javascript, design patterns, html, CSS. include source code examples, the output must be in the follow format:
 ---
 title: "title goes here"
 date: today's date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
