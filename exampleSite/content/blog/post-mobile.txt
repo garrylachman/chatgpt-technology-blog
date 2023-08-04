@@ -1,4 +1,4 @@
-write a uniqe blog post about mobile (android or iphone). provide latest news, tricks, tutrials and applications. the output must be in the follow format:
+write a uniqe blog post about mobile (android or iphone). provide latest news, tricks, tutrials or applications. the output must be in the follow format:
 ---
 title: "title goes here"
 date: today's date time (now) goes here using format yyyy-MM-ddTHH:mm:ss
