@@ -118,4 +118,5 @@ enable = true
 expire_days = 2
 
 
-############################# social site ########################
+[markup.highlight]
+style = 'manni'
