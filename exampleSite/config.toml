@@ -116,7 +116,3 @@ author = "Innovation Tech Junction"
 [params.cookies]
 enable = true
 expire_days = 2
-
-
-[markup.highlight]
-style = 'manni'
