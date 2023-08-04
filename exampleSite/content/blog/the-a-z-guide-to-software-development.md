@@ -13,7 +13,6 @@ tags:
 - "Python"
 - "Ruby"
 - "JavaScript"
-- "C#"
 type: "featured"
 --- 
 

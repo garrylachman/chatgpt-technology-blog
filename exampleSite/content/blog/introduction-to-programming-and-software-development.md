@@ -12,8 +12,7 @@ tags:
 - "C++" 
 - "Python" 
 - "Ruby" 
-- "JavaScript" 
-- "C#" 
+- "JavaScript"  
 type: "featured" 
 --- 
 
