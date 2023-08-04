@@ -234,6 +234,10 @@
    
   }
 
+  code {
+    color: $text-color-light !important;
+  }
+
   h1,
   h2,
   h3,
@@ -305,7 +309,7 @@
 
     p {
       margin-bottom: 0;
-      color: $text-color-light;
+      color: $text-color-dark;
       font-style: italic !important;
     }
   }
