@@ -1,183 +1,105 @@
 --- 
 title: "Exploring Design Patterns in Java"
-date: 2021-10-10T12:00:00
+date: 2021-06-15T10:00:00
 draft: false
-description: "Learn about design patterns in Java and how they can be applied in software development."
+description: "Learn about design patterns in Java and how they can enhance your software development skills"
 categories: 
-- "Programming"
+  - "Programming"
 tags: 
-- "Java"
-- "Design Patterns"
+  - "Java"
+  - "Design Patterns"
 type: "featured"
 ---
 
 # Exploring Design Patterns in Java
 
-Design patterns are reusable solutions to common problems in software development. They provide a way to create flexible and maintainable code by capturing best practices and proven approaches. In this blog post, we will explore some commonly used design patterns in Java and how they can be implemented.
+Design patterns play a crucial role in software development as they provide reusable solutions to commonly occurring problems. They help improve code readability, maintainability, and scalability. In this blog post, we will delve into some popular design patterns and demonstrate their implementation in Java.
 
 ## 1. Singleton Pattern
 
-The Singleton pattern ensures that only a single instance of a class is created and provides a global point of access to it. It is useful in scenarios where we want to restrict the instantiation of a class to a single object.
+The Singleton pattern ensures that only one instance of a class is created and provides global access to that instance. This can be useful in scenarios where you need to restrict the number of instances of a class, such as database connections or thread pools.
 
 ```java
 public class Singleton {
     private static Singleton instance;
-    
+
     private Singleton() {
-        // Private constructor to prevent instantiation
+        // Private constructor to prevent direct instantiation
     }
-    
+
     public static Singleton getInstance() {
         if (instance == null) {
-            instance = new Singleton();
+            synchronized (Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
         }
         return instance;
     }
 }
 ```
 
-Usage:
+## 2. Observer Pattern
+
+The Observer pattern establishes a one-to-many dependency between a subject (observable) and its observers. Whenever the state of the subject changes, all dependent observers are notified and updated automatically.
 
 ```java
-Singleton singleton = Singleton.getInstance();
-```
-
-## 2. Factory Pattern
-
-The Factory pattern is used to create objects without exposing the creation logic to the client. It provides a way to delegate the object creation to subclasses or concrete implementation classes.
-
-```java
-public interface Shape {
-    void draw();
+public interface Observer {
+    void update(String message);
 }
-
-public class Circle implements Shape {
-    @Override
-    public void draw() {
-        System.out.println("Drawing Circle");
-    }
-}
-
-public class Square implements Shape {
-    @Override
-    public void draw() {
-        System.out.println("Drawing Square");
-    }
-}
-
-public class ShapeFactory {
-    public Shape createShape(String type) {
-        if (type.equalsIgnoreCase("circle")) {
-            return new Circle();
-        } else if (type.equalsIgnoreCase("square")) {
-            return new Square();
-        }
-        throw new IllegalArgumentException("Invalid shape type");
-    }
-}
-```
-
-Usage:
-
-```java
-ShapeFactory shapeFactory = new ShapeFactory();
-Shape circle = shapeFactory.createShape("circle");
-circle.draw();
-
-Shape square = shapeFactory.createShape("square");
-square.draw();
-```
-
-## 3. Observer Pattern
-
-The Observer pattern defines one-to-many dependencies between objects, where the change in one object triggers the update in all its dependents. It allows objects to be notified and updated about the changes made in another object.
-
-```java
-import java.util.ArrayList;
-import java.util.List;
 
 public interface Subject {
     void registerObserver(Observer observer);
-    void removeObserver(Observer observer);
-    void notifyObservers();
+    void unregisterObserver(Observer observer);
+    void notifyObservers(String message);
 }
 
-public interface Observer {
-    void update();
-}
-
-public class WeatherStation implements Subject {
+public class ConcreteSubject implements Subject {
     private List<Observer> observers = new ArrayList<>();
-    private int temperature;
-    
-    public int getTemperature() {
-        return temperature;
+    private String state;
+
+    public void setState(String state) {
+        this.state = state;
+        notifyObservers(state);
     }
-    
-    public void setTemperature(int temperature) {
-        this.temperature = temperature;
-        notifyObservers();
-    }
-    
+
     @Override
     public void registerObserver(Observer observer) {
         observers.add(observer);
     }
-    
+
     @Override
-    public void removeObserver(Observer observer) {
+    public void unregisterObserver(Observer observer) {
         observers.remove(observer);
     }
-    
+
     @Override
-    public void notifyObservers() {
+    public void notifyObservers(String message) {
         for (Observer observer : observers) {
-            observer.update();
+            observer.update(message);
         }
     }
 }
 
-public class Smartphone implements Observer {
-    private Subject subject;
-    
-    public Smartphone(Subject subject) {
-        this.subject = subject;
-        this.subject.registerObserver(this);
-    }
-    
+public class ConcreteObserverA implements Observer {
     @Override
-    public void update() {
-        int temperature = ((WeatherStation) subject).getTemperature();
-        System.out.println("Smartphone: Temperature updated - " + temperature);
+    public void update(String message) {
+        System.out.println("ConcreteObserverA received the following message: " + message);
     }
 }
 
-public class Desktop implements Observer {
-    private Subject subject;
-    
-    public Desktop(Subject subject) {
-        this.subject = subject;
-        this.subject.registerObserver(this);
-    }
-    
+public class ConcreteObserverB implements Observer {
     @Override
-    public void update() {
-        int temperature = ((WeatherStation) subject).getTemperature();
-        System.out.println("Desktop: Temperature updated - " + temperature);
+    public void update(String message) {
+        System.out.println("ConcreteObserverB received the following message: " + message);
     }
 }
 ```
 
-Usage:
+## Conclusion
 
-```java
-WeatherStation weatherStation = new WeatherStation();
-Smartphone smartphone = new Smartphone(weatherStation);
-Desktop desktop = new Desktop(weatherStation);
+Design patterns serve as powerful tools in software development. They provide reusable solutions to common problems, allowing developers to write more maintainable and scalable code. In this article, we explored the Singleton pattern, which ensures the creation of a single instance of a class, and the Observer pattern, which establishes a dependency between a subject and its observers. These are just two out of many design patterns you can utilize in your Java projects.
 
-weatherStation.setTemperature(25);
-```
+Now that you have a basic understanding of these design patterns, experiment with them in your own projects and explore other design patterns available for Java. Happy coding!
 
-These are just a few examples of commonly used design patterns in Java. Understanding and applying these design patterns can greatly improve the quality and maintainability of your code. It's important to choose the appropriate design pattern based on the problem you are trying to solve.
-
-I hope you found this blog post helpful in exploring design patterns in Java. Happy coding!
