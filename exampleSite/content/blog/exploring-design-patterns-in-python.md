@@ -1,8 +1,8 @@
 --- 
 title: "Exploring Design Patterns in Python" 
-date: 2022-01-28T09:00:00 
+date: 2022-05-10T09:30:00 
 draft: false 
-description: "Learn about design patterns and how they can be implemented in Python for better software development." 
+description: "Learn about design patterns in Python and how they can be used to solve common software development challenges." 
 categories: 
   - "Programming" 
 tags: 
@@ -13,105 +13,104 @@ type: "featured"
 
 # Exploring Design Patterns in Python
 
-Design patterns are reusable solutions to common software design problems. They provide a way to structure, organize, and communicate the design of a software system. In this blog post, we will explore some popular design patterns and demonstrate their implementation in Python.
+Design patterns are well-established solutions to common software development problems. They provide reusable templates that can be applied to different situations. In this blog post, we will explore some popular design patterns in Python and illustrate how they can be implemented with code examples.
 
-## Observer Pattern
+## 1. Observer Pattern
 
-The Observer pattern is used when there is a one-to-many relationship between objects. The pattern defines a way to notify multiple dependent objects (observers) when a subject object (observable) undergoes a change.
-
-Here's an example of how the Observer pattern can be implemented in Python:
+The Observer pattern is used when there is a one-to-many relationship between objects. When the state of one object changes, all its dependents are automatically notified and updated. Let's consider a scenario where we have a Subject class that maintains a list of observers and notifies them when its state changes.
 
 ```python
 class Subject:
     def __init__(self):
         self.observers = []
-
+        self.state = None
+    
     def attach(self, observer):
         self.observers.append(observer)
-
+    
     def detach(self, observer):
         self.observers.remove(observer)
-
+    
     def notify(self):
         for observer in self.observers:
             observer.update()
-
-class ConcreteSubject(Subject):
-    def __init__(self, state):
-        super().__init__()
-        self._state = state
-
-    @property
-    def state(self):
-        return self._state
-
-    @state.setter
-    def state(self, value):
-        self._state = value
+    
+    def set_state(self, state):
+        self.state = state
         self.notify()
 
 class Observer:
+    def __init__(self, subject):
+        self.subject = subject
+        self.subject.attach(self)
+        self.state = None
+    
     def update(self):
-        pass
-
-class ConcreteObserver(Observer):
-    def __init__(self, name, subject):
-        self._name = name
-        self._subject = subject
-
-    def update(self):
-        print(f"{self._name} received update. New state: {self._subject.state}")
-
-# Usage example:
-subject = ConcreteSubject("Initial state")
-
-observer1 = ConcreteObserver("Observer 1", subject)
-observer2 = ConcreteObserver("Observer 2", subject)
-
-subject.attach(observer1)
-subject.attach(observer2)
-
-subject.state = "Updated state"
+        self.state = self.subject.state
+        print(f"Updated state: {self.state}")
 ```
 
-Output:
+## 2. Factory Pattern
+
+The Factory pattern is a creational design pattern that provides an interface for creating objects, but allows subclasses to decide which class to instantiate. This pattern is useful when we want to abstract away the process of object creation.
+
+```python
+class Shape:
+    def draw(self):
+        raise NotImplementedError("Method draw() must be implemented by subclasses")
+
+class Circle(Shape):
+    def draw(self):
+        print("Drawing a circle")
+
+class Square(Shape):
+    def draw(self):
+        print("Drawing a square")
+
+class ShapeFactory:
+    def create_shape(self, shape_type):
+        if shape_type == "circle":
+            return Circle()
+        elif shape_type == "square":
+            return Square()
+        else:
+            raise ValueError(f"Invalid shape type: {shape_type}")
+
+factory = ShapeFactory()
+circle = factory.create_shape("circle")
+circle.draw()  # Output: Drawing a circle
+square = factory.create_shape("square")
+square.draw()  # Output: Drawing a square
 ```
-Observer 1 received update. New state: Updated state
-Observer 2 received update. New state: Updated state
-```
 
-In this example, `Subject` acts as the subject object, and `ConcreteSubject` extends it to define a specific subject with a state. `Observer` is an abstract base class that defines the interface for all observers, and `ConcreteObserver` is a concrete implementation of an observer that prints the received update.
+## 3. Singleton Pattern
 
-## Singleton Pattern
-
-The Singleton pattern restricts the instantiation of a class to a single object, ensuring that only one instance of the class exists throughout the application.
-
-Here's an example of how the Singleton pattern can be implemented in Python:
+The Singleton pattern ensures that there is only one instance of a class, providing a global point of access to it. This pattern can be useful when we want to restrict the instantiation of a class to a single object.
 
 ```python
 class Singleton:
     _instance = None
 
-    def __new__(cls, *args, **kwargs):
-        if not cls._instance:
-            cls._instance = super().__new__(cls, *args, **kwargs)
-        return cls._instance
+    @staticmethod
+    def get_instance():
+        if Singleton._instance is None:
+            Singleton()
+        return Singleton._instance
+    
+    def __init__(self):
+        if Singleton._instance is not None:
+            raise Exception("Instance already exists. Use get_instance() to retrieve it.")
+        else:
+            Singleton._instance = self
 
-# Usage example:
-singleton1 = Singleton()
-singleton2 = Singleton()
+instance1 = Singleton.get_instance()
+instance2 = Singleton.get_instance()
 
-print(singleton1 is singleton2)  # Output: True
+print(instance1 is instance2)  # Output: True
 ```
-
-In this example, the `Singleton` class keeps track of its single instance in the `_instance` attribute. When an instance is requested, the `__new__` method is called, and if no instance exists, a new one is created and stored in `_instance`. Subsequent requests return the same instance.
 
 ## Conclusion
 
-Design patterns are powerful tools that can enhance software development by providing proven solutions to common problems. In this blog post, we explored the Observer pattern and the Singleton pattern, along with their implementation in Python. However, these patterns are just a glimpse of the wide range of design patterns available.
+Design patterns are an essential part of software development, providing proven solutions to common problems. In this blog post, we explored the Observer pattern, Factory pattern, and Singleton pattern in Python. By understanding and applying design patterns, developers can improve the efficiency, maintainability, and extensibility of their code.
 
-Understanding and utilizing design patterns can greatly improve the quality, maintainability, and extensibility of your code. Consider studying more design patterns and applying them in your projects to become a more proficient software developer.
-
-Remember, patterns are not one-size-fits-all solutions, and their usefulness depends on the specific context of your application. So, choose wisely and adapt the patterns to best suit your needs.
-
-Happy coding!
+Remember, design patterns are not silver bullets and should be used judiciously. Each pattern serves a specific purpose and should be applied in appropriate situations. Happy coding!
