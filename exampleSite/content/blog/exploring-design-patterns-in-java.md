@@ -1,147 +1,133 @@
 --- 
 title: "Exploring Design Patterns in Java"
-date: 2023-07-15T10:00:00
+date: 2022-05-10T09:00:00
 draft: false
-description: "A journey into design patterns and their implementation in Java."
-categories:
-- "Programming"
-tags:
+description: "Learn about design patterns and how they can be implemented in Java to improve software development."
+categories: 
+- "Software Development"
+tags: 
 - "Java"
 - "Design Patterns"
-- "Software Development"
 type: "featured"
---- 
+---
 
 # Exploring Design Patterns in Java
 
-Design patterns are proven solutions to common software design problems, providing developers with a blueprint to solve recurring issues effectively. In this blog post, we will explore various design patterns and their implementation in Java. Let's dive in!
+Design patterns are reusable solutions to common software design problems that can help make your code more flexible, modular, and maintainable. In this article, we will explore some popular design patterns and provide examples of their implementation in Java.
 
 ## 1. Singleton Pattern
 
-The Singleton pattern ensures that only one instance of a class is created and provides a global point of access to it. Let's take a look at an example:
+The Singleton pattern ensures that only one instance of a class is created and provides a global point of access to it. This is useful in scenarios where a single instance of a class should be shared across different parts of the application. Here's an example of implementing the Singleton pattern in Java:
 
 ```java
 public class Singleton {
     private static Singleton instance;
-
+    
     private Singleton() {}
-
+    
     public static Singleton getInstance() {
-        if (instance == null) {
+        if(instance == null) {
             instance = new Singleton();
         }
         return instance;
     }
 }
-
-// Usage
-Singleton singleton = Singleton.getInstance();
 ```
 
-## 2. Factory Pattern
+## 2. Strategy Pattern
 
-The Factory pattern provides an interface for creating objects, but allows subclasses to determine the class to instantiate. Here's a simplified example:
+The Strategy pattern defines a family of interchangeable algorithms and encapsulates each one within a separate class. This allows the algorithm to vary independently from clients that use it. Here's an example of implementing the Strategy pattern in Java:
 
 ```java
-interface Shape {
-    void draw();
+public interface PaymentStrategy {
+    void pay(double amount);
 }
 
-class Circle implements Shape {
+public class CreditCardStrategy implements PaymentStrategy {
+    private String cardNumber;
+    private String cvv;
+    
+    public CreditCardStrategy(String cardNumber, String cvv) {
+        this.cardNumber = cardNumber;
+        this.cvv = cvv;
+    }
+    
     @Override
-    public void draw() {
-        System.out.println("Drawing a circle.");
+    public void pay(double amount) {
+        System.out.println("Paid $" + amount + " with credit card: " + cardNumber);
     }
 }
 
-class Rectangle implements Shape {
+public class PayPalStrategy implements PaymentStrategy {
+    private String email;
+    private String password;
+    
+    public PayPalStrategy(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+    
     @Override
-    public void draw() {
-        System.out.println("Drawing a rectangle.");
+    public void pay(double amount) {
+        System.out.println("Paid $" + amount + " with PayPal: " + email);
     }
 }
 
-class ShapeFactory {
-    public Shape createShape(String type) {
-        if (type.equalsIgnoreCase("circle")) {
-            return new Circle();
-        } else if (type.equalsIgnoreCase("rectangle")) {
-            return new Rectangle();
-        }
-        return null;
+public class ShoppingCart {
+    private PaymentStrategy paymentStrategy;
+    
+    public void setPaymentStrategy(PaymentStrategy paymentStrategy) {
+        this.paymentStrategy = paymentStrategy;
+    }
+    
+    public void pay(double amount) {
+        paymentStrategy.pay(amount);
     }
 }
-
-// Usage
-ShapeFactory factory = new ShapeFactory();
-Shape circle = factory.createShape("circle");
-circle.draw();
-Shape rectangle = factory.createShape("rectangle");
-rectangle.draw();
 ```
 
 ## 3. Observer Pattern
 
-The Observer pattern establishes a one-to-many dependency between objects, where changing the state of one object triggers updates to all its dependents. Here's a basic implementation:
+The Observer pattern defines a one-to-many dependency between objects, so that when one object changes state, all its dependents are notified and updated automatically. This allows for loose coupling between objects. Here's an example of implementing the Observer pattern in Java:
 
 ```java
 import java.util.ArrayList;
 import java.util.List;
 
-interface Observer {
-    void update(String message);
+public interface Observer {
+    void update();
 }
 
-class Subject {
+public class ConcreteObserver implements Observer {
+    @Override
+    public void update() {
+        System.out.println("ConcreteObserver updated.");
+    }
+}
+
+public class Subject {
     private List<Observer> observers = new ArrayList<>();
-    private String message;
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-        notifyObservers();
-    }
-
+    
     public void attach(Observer observer) {
         observers.add(observer);
     }
-
+    
     public void detach(Observer observer) {
         observers.remove(observer);
     }
-
-    private void notifyObservers() {
+    
+    public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update(message);
+            observer.update();
         }
     }
 }
-
-class ConcreteObserver implements Observer {
-    private String name;
-
-    public ConcreteObserver(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public void update(String message) {
-        System.out.println(name + " received the message: " + message);
-    }
-}
-
-// Usage
-Subject subject = new Subject();
-ConcreteObserver observer1 = new ConcreteObserver("Observer 1");
-ConcreteObserver observer2 = new ConcreteObserver("Observer 2");
-subject.attach(observer1);
-subject.attach(observer2);
-subject.setMessage("Hello, observers!");
 ```
 
-## Conclusion
+These are just three examples of design patterns that can be implemented in Java to improve software development. Understanding and utilizing design patterns can greatly enhance the quality and maintainability of your code. So next time you encounter a recurring software design problem, consider applying a design pattern as a solution.
 
-In this blog post, we explored three common design patterns: Singleton, Factory, and Observer. These patterns provide reusable solutions to specific design problems. By incorporating them into your Java code, you can improve its maintainability, extensibility, and overall quality. Stay tuned for more explorations into the world of design patterns!
+Implementing design patterns in your code can make it more modular, easier to understand, and less prone to bugs. Give these design patterns a try in your Java projects and see the benefits they bring to your software development process. Happy coding!
+
+Remember to check out our previous blog posts for more programming tips and tutorials. Stay tuned for our upcoming articles on other programming languages and software development concepts.
+
+
