@@ -1,202 +1,96 @@
 --- 
-title: "Exploring Design Patterns in Java"
-date: 2022-10-01T10:00:00
-draft: false
-description: "Learn about various design patterns in Java and how they can be applied to software development."
-categories:
-  - "Programming"
-tags:
-  - "Java"
-  - "Design Patterns"
-type: "featured"
---- 
+title: "Exploring Design Patterns in Java" 
+date: 2022-10-10T09:00:00 
+draft: false 
+description: "Learn about the importance and implementation of design patterns in Java programming." 
+categories: 
+- "Programming" 
+tags: 
+- "Java" 
+- "Design Patterns" 
+type: "featured" 
+---
 
-## Introduction
+# Exploring Design Patterns in Java
 
-Design patterns play a crucial role in software development as they provide solutions to recurring problems. In this blog post, we will explore some of the most commonly used design patterns in Java and see how they can be implemented to enhance your software projects.
+When it comes to writing efficient and maintainable code, design patterns play a crucial role. Design patterns are proven solutions to common programming problems that provide a blueprint for building high-quality software. In this article, we will explore some widely used design patterns in Java and see how they can improve the structure and flexibility of your code.
 
-### Creational Patterns
+## 1. Singleton Pattern
 
-#### Singleton Pattern
-
-The Singleton pattern ensures that only one instance of a class is created throughout the application. This can be useful when you want to limit the number of objects created or share a common resource. Here's an example:
+The Singleton pattern ensures that only one instance of a class is created throughout the application. This pattern is useful in scenarios where you need to maintain a global state, such as a configuration manager or a logging system.
 
 ```java
 public class Singleton {
-   private static Singleton instance = null;
-
-   private Singleton() {
-      // Private constructor to prevent instantiation
-   }
-
-   public static synchronized Singleton getInstance() {
-      if (instance == null) {
-         instance = new Singleton();
-      }
-      return instance;
-   }
+    private static Singleton instance;
+    private Singleton() {
+        // Private constructor to prevent instantiation
+    }
+    public static synchronized Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
 }
 ```
 
-#### Factory Pattern
+Using the Singleton pattern, you can ensure that only one instance of the `Singleton` class is created, regardless of how many times the `getInstance()` method is called.
 
-The Factory pattern provides an interface for creating objects but allows subclasses to decide which classes to instantiate. This promotes loose coupling and provides a way to create objects without exposing the instantiation logic. Here's an example:
+## 2. Observer Pattern
+
+The Observer pattern is helpful when you want to establish a one-to-many relationship between objects. In this pattern, there is a subject (the provider of information) and multiple observers (objects that need to be notified of any changes in the subject).
+
+```java
+public interface Observer {
+    void update(String message);
+}
+public interface Subject {
+    void registerObserver(Observer observer);
+    void removeObserver(Observer observer);
+    void notifyObservers(String message);
+}
+```
+
+By implementing the `Observer` and `Subject` interfaces, you can create a flexible system where objects can register themselves as observers and receive updates when the subject changes.
+
+## 3. Factory Pattern
+
+The Factory pattern provides an interface for creating objects, but lets subclasses decide which class to instantiate. It encapsulates object creation, allowing the client code to depend on the abstraction rather than the concrete implementation.
 
 ```java
 public interface Shape {
-   void draw();
+    void draw();
 }
-
 public class Circle implements Shape {
-   @Override
-   public void draw() {
-      System.out.println("Drawing Circle");
-   }
+    @Override
+    public void draw() {
+        System.out.println("Drawing a circle.");
+    }
 }
-
-public class Rectangle implements Shape {
-   @Override
-   public void draw() {
-      System.out.println("Drawing Rectangle");
-   }
+public class Square implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a square.");
+    }
 }
-
 public class ShapeFactory {
-   public Shape createShape(String type) {
-      if (type.equalsIgnoreCase("circle")) {
-         return new Circle();
-      } else if (type.equalsIgnoreCase("rectangle")) {
-         return new Rectangle();
-      }
-      return null;
-   }
+    public Shape getShape(String shapeType) {
+        if (shapeType.equalsIgnoreCase("CIRCLE")) {
+            return new Circle();
+        } else if (shapeType.equalsIgnoreCase("SQUARE")) {
+            return new Square();
+        }
+        return null;
+    }
 }
 ```
 
-### Structural Patterns
-
-#### Adapter Pattern
-
-The Adapter pattern allows incompatible classes to work together by providing a bridge between them. It translates the interface of one class into another interface that the clients expect. Here's an example:
-
-```java
-public interface MediaPlayer {
-   void play(String audioType, String fileName);
-}
-
-public interface AdvancedMediaPlayer {
-   void playVlc(String fileName);
-   void playMp4(String fileName);
-}
-
-public class VlcPlayer implements AdvancedMediaPlayer {
-   @Override
-   public void playVlc(String fileName) {
-      System.out.println("Playing VLC file: " + fileName);
-   }
-
-   @Override
-   public void playMp4(String fileName) {
-      // Do nothing
-   }
-}
-
-public class Mp4Player implements AdvancedMediaPlayer {
-   @Override
-   public void playVlc(String fileName) {
-      // Do nothing
-   }
-
-   @Override
-   public void playMp4(String fileName) {
-      System.out.println("Playing MP4 file: " + fileName);
-   }
-}
-
-public class MediaAdapter implements MediaPlayer {
-   private AdvancedMediaPlayer advancedMediaPlayer;
-
-   public MediaAdapter(String audioType) {
-      if (audioType.equalsIgnoreCase("vlc")) {
-         advancedMediaPlayer = new VlcPlayer();
-      } else if (audioType.equalsIgnoreCase("mp4")) {
-         advancedMediaPlayer = new Mp4Player();
-      }
-   }
-
-   @Override
-   public void play(String audioType, String fileName) {
-      if (audioType.equalsIgnoreCase("vlc")) {
-         advancedMediaPlayer.playVlc(fileName);
-      } else if (audioType.equalsIgnoreCase("mp4")) {
-         advancedMediaPlayer.playMp4(fileName);
-      }
-   }
-}
-```
-
-### Behavioral Patterns
-
-#### Observer Pattern
-
-The Observer pattern defines a one-to-many dependency between objects, so that when one object changes state, all its dependents are notified and updated automatically. Here's an example:
-
-```java
-public interface Subject {
-   void registerObserver(Observer observer);
-   void removeObserver(Observer observer);
-   void notifyObservers();
-}
-
-public interface Observer {
-   void update(String message);
-}
-
-public class NewsAgency implements Subject {
-   private List<Observer> observers = new ArrayList<>();
-   private String news;
-
-   @Override
-   public void registerObserver(Observer observer) {
-      observers.add(observer);
-   }
-
-   @Override
-   public void removeObserver(Observer observer) {
-      observers.remove(observer);
-   }
-
-   @Override
-   public void notifyObservers() {
-      for (Observer observer : observers) {
-         observer.update(news);
-      }
-   }
-
-   public void setNews(String news) {
-      this.news = news;
-      notifyObservers();
-   }
-}
-
-public class NewsChannel implements Observer {
-   private String name;
-
-   public NewsChannel(String name) {
-      this.name = name;
-   }
-
-   @Override
-   public void update(String message) {
-      System.out.println(name + " received news: " + message);
-   }
-}
-```
+Using the Factory pattern, you can create objects without exposing the creation logic to the client. The `ShapeFactory` class takes care of creating the appropriate `Shape` object based on the input provided.
 
 ## Conclusion
 
-Design patterns provide proven solutions to common problems in software development. In this blog post, we explored some commonly used design patterns in Java, including the Singleton, Factory, Adapter, and Observer patterns. By understanding and applying these patterns, you can improve the structure and flexibility of your software projects.
+Design patterns are powerful tools for designing extensible and maintainable software. In this article, we explored just a few of the many design patterns available in Java. By incorporating these patterns into your code, you can enhance code reusability, flexibility, and overall maintainability.
 
-Remember to choose the design pattern that best fits your application's requirements and promotes maintainability and extensibility. Happy coding!
+Remember, design patterns are not silver bullets and should be used judiciously. Each pattern has its own pros and cons, and not all patterns are applicable in every situation. It's important to understand the problem at hand and select the appropriate pattern that best suits your needs.
 
-Now it's your turn! Try implementing these design patterns in your own projects and see how they can enhance your software development. Let me know in the comments if you have any questions or suggestions.
+Happy coding with Java and design patterns!
