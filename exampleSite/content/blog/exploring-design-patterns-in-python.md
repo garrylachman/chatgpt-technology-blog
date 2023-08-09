@@ -1,11 +1,11 @@
 --- 
 title: "Exploring Design Patterns in Python"
-date: 2022-07-01T12:00:00
+date: 2022-09-12T09:30:00
 draft: false
-description: "Learn about different design patterns in Python and explore their implementation through code examples."
-categories: 
+description: "Learn about the power of design patterns in Python and how they can improve your software development process."
+categories:
 - "Programming"
-tags: 
+tags:
 - "Python"
 - "Design Patterns"
 type: "featured"
@@ -13,11 +13,11 @@ type: "featured"
 
 # Exploring Design Patterns in Python
 
-Design patterns are reusable solutions to common software design problems. They serve as templates that guide us in designing flexible and maintainable code. In this blog post, we will explore some popular design patterns and their implementation in Python.
+Design patterns play a crucial role in software development as they provide elegant solutions to recurring problems. In Python, there are various design patterns that can be utilized to improve the structure and maintainability of code. In this article, we will explore some popular design patterns and provide source code examples to illustrate their implementation.
 
-## Singleton Pattern
+## 1. Singleton Pattern
 
-The Singleton pattern ensures that only one instance of a class exists throughout the program's execution. It is useful when we want to restrict the instantiation of a class to a single object.
+The Singleton pattern ensures that a class has only one instance and provides a global point of access to it. This pattern can be useful in scenarios where you want to restrict the instantiation of a class to a single object.
 
 ```python
 class Singleton:
@@ -27,94 +27,94 @@ class Singleton:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
+
+# Usage
+instance1 = Singleton()
+instance2 = Singleton()
+
+print(instance1 is instance2)  # Output: True
 ```
 
-Usage:
+## 2. Factory Pattern
+
+The Factory pattern provides an interface for creating objects and allows the subclasses to decide which class to instantiate. This pattern abstracts the process of object creation and promotes loose coupling between classes.
 
 ```python
-a = Singleton()
-b = Singleton()
+class Shape:
+    def draw(self):
+        raise NotImplementedError
 
-print(a is b)  # Output: True
+class Circle(Shape):
+    def draw(self):
+        print("Drawing a circle.")
+
+class Rectangle(Shape):
+    def draw(self):
+        print("Drawing a rectangle.")
+
+class ShapeFactory:
+    @staticmethod
+    def create_shape(shape_type):
+        if shape_type == "circle":
+            return Circle()
+        elif shape_type == "rectangle":
+            return Rectangle()
+        else:
+            raise ValueError("Invalid shape type.")
+
+# Usage
+circle = ShapeFactory.create_shape("circle")
+rectangle = ShapeFactory.create_shape("rectangle")
+
+circle.draw()  # Output: Drawing a circle.
+rectangle.draw()  # Output: Drawing a rectangle.
 ```
 
-## Observer Pattern
+## 3. Observer Pattern
 
-The Observer pattern allows an object, known as the subject, to maintain a list of its dependents, called observers, and notify them automatically of any state changes.
+The Observer pattern defines a one-to-many relationship between objects, where one object (subject) notifies the others (observers) about any state changes. This pattern is useful when you want to decouple the sender and receiver, allowing for easily adding or removing observers.
 
 ```python
 class Subject:
     def __init__(self):
-        self.observers = []
+        self._observers = []
 
-    def attach(self, observer):
-        self.observers.append(observer)
+    def add_observer(self, observer):
+        self._observers.append(observer)
 
-    def detach(self, observer):
-        self.observers.remove(observer)
+    def remove_observer(self, observer):
+        self._observers.remove(observer)
 
-    def notify(self):
-        for observer in self.observers:
-            observer.update()
+    def notify_observers(self, message):
+        for observer in self._observers:
+            observer.update(message)
 
 class Observer:
-    def update(self):
-        print("Notification received!")
+    def update(self, message):
+        raise NotImplementedError
 
+class EmailNotifier(Observer):
+    def update(self, message):
+        print(f"Email notification: {message}")
 
+class SMSNotifier(Observer):
+    def update(self, message):
+        print(f"SMS notification: {message}")
+
+# Usage
 subject = Subject()
-observer1 = Observer()
-observer2 = Observer()
+email_notifier = EmailNotifier()
+sms_notifier = SMSNotifier()
 
-subject.attach(observer1)
-subject.attach(observer2)
+subject.add_observer(email_notifier)
+subject.add_observer(sms_notifier)
 
-subject.notify()
-
+subject.notify_observers("Hello, World!")
 # Output:
-# Notification received!
-# Notification received!
+# Email notification: Hello, World!
+# SMS notification: Hello, World!
 ```
 
-## Factory Pattern
+## Conclusion
 
-The Factory pattern encapsulates the creation of objects in a separate factory class. It provides an interface for creating objects, but lets subclasses decide which class to instantiate.
-
-```python
-class Product:
-    def run(self):
-        pass
-
-class ProductA(Product):
-    def run(self):
-        print("Product A is running...")
-
-class ProductB(Product):
-    def run(self):
-        print("Product B is running...")
-
-class Factory:
-    @staticmethod
-    def create_product(product_type):
-        if product_type == "A":
-            return ProductA()
-        elif product_type == "B":
-            return ProductB()
-
-factory = Factory()
-product_a = factory.create_product("A")
-product_b = factory.create_product("B")
-
-product_a.run()  # Output: Product A is running...
-product_b.run()  # Output: Product B is running...
-```
-
-These are just a few examples of popular design patterns in Python. Understanding and applying design patterns can greatly enhance code quality and maintainability. Experiment with these examples and try to implement other design patterns in your projects.
-
-Remember, design patterns are not rigid rules, but rather guidelines that help us solve common software design problems. Happy coding!
-
-References:
-- [Design Patterns - Gang of Four](https://en.wikipedia.org/wiki/Design_Patterns)
-- [Python Design Patterns](https://refactoring.guru/design-patterns/python)
-
-Hope you found this blog post helpful! If you have any questions or suggestions, feel free to leave a comment below.
+Design patterns provide well-established solutions to common problems in software development. By adopting design patterns in your Python projects, you can enhance code maintainability, flexibility, and readability. This article introduced the Singleton, Factory, and Observer patterns, showcasing their implementation in Python. Experiment with these patterns and explore more patterns to empower your software development skills.
