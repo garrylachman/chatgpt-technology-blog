@@ -1,218 +1,120 @@
 --- 
 title: "Exploring Design Patterns in Python"
-date: 2022-10-15T09:00:00 
-draft: false 
-description: "In this blog post, we will dive into the world of Python design patterns and explore their importance in software development."
+date: 2022-07-01T12:00:00
+draft: false
+description: "Learn about different design patterns in Python and explore their implementation through code examples."
 categories: 
 - "Programming"
 tags: 
 - "Python"
 - "Design Patterns"
-type: "featured" 
+type: "featured"
 ---
 
 # Exploring Design Patterns in Python
 
-Design patterns are reusable solutions to common software design problems. They provide a structured approach to solving certain problems and help developers write more maintainable and scalable code. In this blog post, we will dive into the world of Python design patterns and explore their importance in software development.
+Design patterns are reusable solutions to common software design problems. They serve as templates that guide us in designing flexible and maintainable code. In this blog post, we will explore some popular design patterns and their implementation in Python.
 
-## Creational Design Patterns
+## Singleton Pattern
 
-Creational design patterns deal with object creation mechanisms, trying to create objects in a manner suitable for the situation. Let's take a look at a few examples:
-
-### Singleton Pattern
-
-The Singleton pattern restricts the instantiation of a class to a single object. This pattern is useful when you want a single instance of a class to be available globally in your application.
+The Singleton pattern ensures that only one instance of a class exists throughout the program's execution. It is useful when we want to restrict the instantiation of a class to a single object.
 
 ```python
 class Singleton:
     _instance = None
-    
-    @staticmethod
-    def get_instance():
-        if not Singleton._instance:
-            Singleton._instance = Singleton()
-        return Singleton._instance
-    
-# Usage
-singleton = Singleton.get_instance()
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
 ```
 
-### Factory Pattern
-
-The Factory pattern provides an interface for creating objects, but allows subclasses to decide which class to instantiate. It promotes loose coupling by abstracting the object creation process.
+Usage:
 
 ```python
-class Animal:
-    def speak(self):
-        pass
+a = Singleton()
+b = Singleton()
 
-class Dog(Animal):
-    def speak(self):
-        return "Woof!"
-
-class Cat(Animal):
-    def speak(self):
-        return "Meow!"
-
-class AnimalFactory:
-    def create_animal(self, animal_type):
-        if animal_type == "dog":
-            return Dog()
-        elif animal_type == "cat":
-            return Cat()
-        else:
-            raise ValueError("Invalid animal type")
-
-# Usage
-animal_factory = AnimalFactory()
-animal = animal_factory.create_animal("dog")
-print(animal.speak())  # Output: Woof!
+print(a is b)  # Output: True
 ```
 
-## Structural Design Patterns
+## Observer Pattern
 
-Structural design patterns deal with object composition to form larger structures. Let's explore a couple of examples:
-
-### Adapter Pattern
-
-The Adapter pattern converts the interface of a class into another interface the client expects. It allows classes with incompatible interfaces to work together.
+The Observer pattern allows an object, known as the subject, to maintain a list of its dependents, called observers, and notify them automatically of any state changes.
 
 ```python
-class Target:
-    def request(self):
-        pass
-
-class Adaptee:
-    def specific_request(self):
-        return "Adaptee's specific request"
-
-class Adapter(Target):
-    def __init__(self, adaptee):
-        self.adaptee = adaptee
-    
-    def request(self):
-        return self.adaptee.specific_request()
-
-# Usage
-adaptee = Adaptee()
-adapter = Adapter(adaptee)
-print(adapter.request())  # Output: Adaptee's specific request
-```
-
-### Decorator Pattern
-
-The Decorator pattern allows behavior to be added to an object dynamically. It provides a flexible alternative to subclassing for extending functionality.
-
-```python
-class Component:
-    def operation(self):
-        pass
-
-class ConcreteComponent(Component):
-    def operation(self):
-        return "ConcreteComponent operation"
-
-class Decorator(Component):
-    def __init__(self, component):
-        self.component = component
-    
-    def operation(self):
-        return self.component.operation()
-
-class ConcreteDecoratorA(Decorator):
-    def operation(self):
-        return f"ConcreteDecoratorA operation, {self.component.operation()}"
-
-class ConcreteDecoratorB(Decorator):
-    def operation(self):
-        return f"ConcreteDecoratorB operation, {self.component.operation()}"
-
-# Usage
-component = ConcreteComponent()
-decorated_component = ConcreteDecoratorB(ConcreteDecoratorA(component))
-print(decorated_component.operation())  # Output: ConcreteDecoratorB operation, ConcreteDecoratorA operation, ConcreteComponent operation
-```
-
-## Behavioral Design Patterns
-
-Behavioral design patterns deal with the interaction between objects. Let's explore a couple of examples:
-
-### Observer Pattern
-
-The Observer pattern defines a one-to-many dependency between objects, where a change in one object triggers updates to its dependents.
-
-```python
-class Publisher:
+class Subject:
     def __init__(self):
-        self.subscribers = []
-    
-    def add_subscriber(self, subscriber):
-        self.subscribers.append(subscriber)
-    
-    def remove_subscriber(self, subscriber):
-        self.subscribers.remove(subscriber)
-    
-    def notify_subscribers(self):
-        for subscriber in self.subscribers:
-            subscriber.update()
+        self.observers = []
 
-class Subscriber:
+    def attach(self, observer):
+        self.observers.append(observer)
+
+    def detach(self, observer):
+        self.observers.remove(observer)
+
+    def notify(self):
+        for observer in self.observers:
+            observer.update()
+
+class Observer:
     def update(self):
-        pass
+        print("Notification received!")
 
-class ConcreteSubscriberA(Subscriber):
-    def update(self):
-        print("ConcreteSubscriberA notified")
 
-class ConcreteSubscriberB(Subscriber):
-    def update(self):
-        print("ConcreteSubscriberB notified")
+subject = Subject()
+observer1 = Observer()
+observer2 = Observer()
 
-# Usage
-publisher = Publisher()
-subscriber_a = ConcreteSubscriberA()
-subscriber_b = ConcreteSubscriberB()
-publisher.add_subscriber(subscriber_a)
-publisher.add_subscriber(subscriber_b)
-publisher.notify_subscribers()
+subject.attach(observer1)
+subject.attach(observer2)
+
+subject.notify()
+
 # Output:
-# ConcreteSubscriberA notified
-# ConcreteSubscriberB notified
+# Notification received!
+# Notification received!
 ```
 
-### Strategy Pattern
+## Factory Pattern
 
-The Strategy pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable. It lets the algorithm vary independently from the clients that use it.
+The Factory pattern encapsulates the creation of objects in a separate factory class. It provides an interface for creating objects, but lets subclasses decide which class to instantiate.
 
 ```python
-class Strategy:
-    def do_algorithm(self):
+class Product:
+    def run(self):
         pass
 
-class ConcreteStrategyA(Strategy):
-    def do_algorithm(self):
-        return "ConcreteStrategyA"
+class ProductA(Product):
+    def run(self):
+        print("Product A is running...")
 
-class ConcreteStrategyB(Strategy):
-    def do_algorithm(self):
-        return "ConcreteStrategyB"
+class ProductB(Product):
+    def run(self):
+        print("Product B is running...")
 
-class Context:
-    def __init__(self, strategy):
-        self.strategy = strategy
-    
-    def execute_strategy(self):
-        return self.strategy.do_algorithm()
+class Factory:
+    @staticmethod
+    def create_product(product_type):
+        if product_type == "A":
+            return ProductA()
+        elif product_type == "B":
+            return ProductB()
 
-# Usage
-strategy_a = ConcreteStrategyA()
-strategy_b = ConcreteStrategyB()
-context = Context(strategy_a)
-print(context.execute_strategy())  # Output: ConcreteStrategyA
-context.strategy = strategy_b
-print(context.execute_strategy())  # Output: ConcreteStrategyB
+factory = Factory()
+product_a = factory.create_product("A")
+product_b = factory.create_product("B")
+
+product_a.run()  # Output: Product A is running...
+product_b.run()  # Output: Product B is running...
 ```
 
-## Conclusion
+These are just a few examples of popular design patterns in Python. Understanding and applying design patterns can greatly enhance code quality and maintainability. Experiment with these examples and try to implement other design patterns in your projects.
 
-Design patterns are an important aspect of software development. They provide proven solutions to common problems and promote maintainable and scalable code. In this blog post, we explored a variety of design patterns in Python, including creational, structural, and behavioral patterns. By applying these patterns, you can enhance the flexibility, reusability, and organization of your code. Happy coding!
+Remember, design patterns are not rigid rules, but rather guidelines that help us solve common software design problems. Happy coding!
+
+References:
+- [Design Patterns - Gang of Four](https://en.wikipedia.org/wiki/Design_Patterns)
+- [Python Design Patterns](https://refactoring.guru/design-patterns/python)
+
+Hope you found this blog post helpful! If you have any questions or suggestions, feel free to leave a comment below.
