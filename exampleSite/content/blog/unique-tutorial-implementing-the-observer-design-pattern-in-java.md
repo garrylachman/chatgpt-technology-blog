@@ -1,39 +1,38 @@
 --- 
 title: "Unique Tutorial: Implementing the Observer Design Pattern in Java"
-date: 2022-05-05T10:00:00
+date: 2022-11-01T09:00:00
 draft: false
-description: "Learn how to implement the Observer design pattern in Java with code examples"
-categories:
+description: "Learn how to implement the Observer Design Pattern in Java with source code examples."
+categories: 
+- "Programming"
+tags: 
 - "Java"
-tags:
 - "Design Patterns"
 - "Observer"
-- "Programming"
 type: "featured"
----
+--- 
 
 # Implementing the Observer Design Pattern in Java
 
-## Introduction
-The Observer design pattern is a behavioral pattern that allows one object, called the subject, to notify a list of dependent objects, called observers, whenever its state changes. This pattern promotes loose coupling between objects, making it easy to maintain and extend a system. In this tutorial, I will guide you through implementing the Observer design pattern in Java.
+The Observer Design Pattern is a behavioral design pattern that allows one-to-many dependency relationship between objects. It is widely used in software development to facilitate communication between different components of an application.
 
-## Prerequisites
-To follow along with this tutorial, you will need:
-- Basic knowledge of Java programming
-- JDK (Java Development Kit) installed on your machine
+In this tutorial, we will learn how to implement the Observer Design Pattern in Java. We will create a simple example where we have a subject (publisher) and multiple observers (subscribers), and the observers will be notified whenever there is a change in the subject.
 
-## Step 1: Define the Subject and Observer Interfaces
-First, let's define the Subject interface that will be implemented by the subject class:
+## Step 1: Create the Subject Interface
+
+First, let's create an interface called `Subject` that defines the methods for registering, unregistering, and notifying observers.
 
 ```java
 public interface Subject {
-    void registerObserver(Observer observer);
+    void addObserver(Observer observer);
     void removeObserver(Observer observer);
     void notifyObservers();
 }
 ```
 
-Next, define the Observer interface that will be implemented by the observer classes:
+## Step 2: Create the Observer Interface
+
+Next, let's create an interface called `Observer` that defines the method that will be called by the subject when a change occurs.
 
 ```java
 public interface Observer {
@@ -41,24 +40,20 @@ public interface Observer {
 }
 ```
 
-## Step 2: Implement the Subject Class
-Now, let's implement the Subject class that will be observed by the observers. Here's an example implementation:
+## Step 3: Implement the Subject
+
+Now, let's implement the `Subject` interface in a class called `NewsPublisher`. This class will maintain a list of observers and notify them whenever there is a change in the news.
 
 ```java
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConcreteSubject implements Subject {
+public class NewsPublisher implements Subject {
     private List<Observer> observers = new ArrayList<>();
-    private int state;
-
-    public void setState(int state) {
-        this.state = state;
-        notifyObservers();
-    }
+    private String news;
 
     @Override
-    public void registerObserver(Observer observer) {
+    public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
@@ -73,50 +68,79 @@ public class ConcreteSubject implements Subject {
             observer.update();
         }
     }
+
+    public void setNews(String news) {
+        this.news = news;
+        notifyObservers();
+    }
+
+    public String getNews() {
+        return news;
+    }
 }
 ```
 
-## Step 3: Implement the Observer Classes
-Now, let's implement some observer classes that will subscribe to the subject's updates. Here's an example implementation of an observer class:
+## Step 4: Implement the Observers
+
+Next, let's create a couple of observer classes that implement the `Observer` interface. These classes will define the behavior that needs to be executed when a change occurs in the subject.
 
 ```java
-public class ConcreteObserver implements Observer {
-    private int observerState;
-    private ConcreteSubject subject;
+public class NewsSubscriberA implements Observer {
+    private NewsPublisher publisher;
 
-    public ConcreteObserver(ConcreteSubject subject) {
-        this.subject = subject;
+    public NewsSubscriberA(NewsPublisher publisher) {
+        this.publisher = publisher;
+        this.publisher.addObserver(this);
     }
 
     @Override
     public void update() {
-        observerState = subject.getState();
-        System.out.println("Observer state updated: " + observerState);
+        System.out.println("News Subscriber A received an update: " + publisher.getNews());
+    }
+}
+
+public class NewsSubscriberB implements Observer {
+    private NewsPublisher publisher;
+
+    public NewsSubscriberB(NewsPublisher publisher) {
+        this.publisher = publisher;
+        this.publisher.addObserver(this);
+    }
+
+    @Override
+    public void update() {
+        System.out.println("News Subscriber B received an update: " + publisher.getNews());
     }
 }
 ```
 
-## Step 4: Putting it All Together
-Finally, let's see how to use the Observer design pattern in a Java program. Here's an example usage:
+## Step 5: Test the Implementation
+
+Finally, let's test our implementation by creating an instance of the `NewsPublisher` class and a couple of observer instances. We will update the news in the publisher and observe how the observers are notified.
 
 ```java
 public class Main {
     public static void main(String[] args) {
-        ConcreteSubject subject = new ConcreteSubject();
-        ConcreteObserver observer1 = new ConcreteObserver(subject);
-        ConcreteObserver observer2 = new ConcreteObserver(subject);
+        NewsPublisher publisher = new NewsPublisher();
+        NewsSubscriberA subscriberA = new NewsSubscriberA(publisher);
+        NewsSubscriberB subscriberB = new NewsSubscriberB(publisher);
 
-        subject.registerObserver(observer1);
-        subject.registerObserver(observer2);
-
-        subject.setState(5); // Output: Observer state updated: 5
+        publisher.setNews("New headline: Java 17 Released!");
     }
 }
 ```
 
-## Conclusion
-Congratulations! You have successfully implemented the Observer design pattern in Java. This pattern allows for a flexible and decoupled communication between objects. By following the steps outlined in this tutorial, you can apply the Observer pattern in your own Java projects.
+The output of this program will be:
 
-I hope you found this tutorial informative and that it helps you in your journey to becoming a proficient Java developer. Happy coding!
+```
+News Subscriber A received an update: New headline: Java 17 Released!
+News Subscriber B received an update: New headline: Java 17 Released!
+```
 
-Please feel free to leave a comment if you have any questions or feedback.
+Congratulations! You have successfully implemented the Observer Design Pattern in Java. This pattern is helpful for decoupling components and simplifying communication in your applications.
+
+Feel free to modify and experiment with the code provided to gain a deeper understanding of the Observer Design Pattern.
+
+Remember, design patterns are powerful tools that can greatly improve your software development skills, so it's important to practice and apply them in your projects.
+
+Happy coding!
