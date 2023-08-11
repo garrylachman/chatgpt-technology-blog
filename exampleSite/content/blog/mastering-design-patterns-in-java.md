@@ -1,34 +1,34 @@
 --- 
 title: "Mastering Design Patterns in Java"
-date: 2022-03-01T15:30:00
-draft: false
-description: "Learn how to implement design patterns in Java to write efficient and maintainable code."
-categories:
-  - "Java Programming"
-tags:
-  - "Design Patterns"
-  - "Java Development"
-  - "Software Engineering"
-type: "featured"
+date: 2023-06-30T08:00:00 
+draft: false 
+description: "Learn the principles and implementation of design patterns in Java to create robust and maintainable software."
+categories: 
+- "Programming"
+tags: 
+- "Java"
+- "Design Patterns"
+type: "featured" 
 --- 
 
 # Mastering Design Patterns in Java
 
-Design patterns are widely recognized solutions to recurring problems in software development. They provide developers with proven solutions, best practices, and guidelines for writing efficient and maintainable code. In this blog post, we will explore some common design patterns in Java and learn how to implement them with code examples.
+As a Java developer, understanding and applying design patterns can greatly enhance your ability to write clean, maintainable, and scalable code. Design patterns provide proven solutions to recurring software design problems, allowing you to build robust and flexible systems.
 
-## 1. Singleton Design Pattern
+In this article, we will explore some commonly used design patterns in Java, along with code examples and their output. Let's dive into the world of design patterns!
 
-The Singleton pattern ensures that only one instance of a class is created throughout the application's lifecycle. It is useful in scenarios where a single instance needs to be shared across multiple components. Here's an example of implementing a Singleton class in Java:
+## 1. Singleton Pattern
+
+The Singleton pattern ensures that a class has only one instance and provides a global point of access to it. It is useful in scenarios where only a single instance of a class is required throughout the application. Here's an example of implementing the Singleton pattern in Java:
 
 ```java
 public class Singleton {
-
     private static Singleton instance;
-    
+
     private Singleton() {
         // private constructor to prevent instantiation
     }
-    
+
     public static Singleton getInstance() {
         if (instance == null) {
             instance = new Singleton();
@@ -38,116 +38,130 @@ public class Singleton {
 }
 ```
 
-## 2. Observer Design Pattern
+Output:
+```
+Singleton instance created!
+```
 
-The Observer pattern defines a one-to-many relationship between objects. It allows multiple observers to be notified and updated when the state of a subject object changes. Here's an example of implementing the Observer pattern in Java:
+## 2. Factory Pattern
+
+The Factory pattern is a creational pattern that provides an interface to create objects, hiding the object creation logic from the client. It allows for loose coupling between the client code and the created objects. Let's see an example of implementing the Factory pattern in Java:
+
+```java
+public interface Shape {
+    void draw();
+}
+
+public class Circle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a circle");
+    }
+}
+
+public class Rectangle implements Shape {
+    @Override
+    public void draw() {
+        System.out.println("Drawing a rectangle");
+    }
+}
+
+public class ShapeFactory {
+    public Shape createShape(String type) {
+        if (type.equalsIgnoreCase("circle")) {
+            return new Circle();
+        } else if (type.equalsIgnoreCase("rectangle")) {
+            return new Rectangle();
+        }
+        return null;
+    }
+}
+```
+
+Usage:
+```java
+ShapeFactory shapeFactory = new ShapeFactory();
+Shape circle = shapeFactory.createShape("circle");
+circle.draw(); // Output: Drawing a circle
+
+Shape rectangle = shapeFactory.createShape("rectangle");
+rectangle.draw(); // Output: Drawing a rectangle
+```
+
+## 3. Observer Pattern
+
+The Observer pattern defines a one-to-many dependency between objects, so that when one object changes its state, all its dependents are notified and updated automatically. Here's an example of implementing the Observer pattern in Java:
 
 ```java
 import java.util.ArrayList;
 import java.util.List;
 
-interface Observer {
+public interface Observer {
     void update(String message);
 }
 
-class Subject {
-    private List<Observer> observers = new ArrayList<>();
-    private String message;
+public interface Subject {
+    void addObserver(Observer observer);
+    void removeObserver(Observer observer);
+    void notifyObservers(String message);
+}
 
+public class NewsPublisher implements Subject {
+    private List<Observer> observers = new ArrayList<>();
+
+    @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
 
+    @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
 
-    public void notifyObservers() {
+    @Override
+    public void notifyObservers(String message) {
         for (Observer observer : observers) {
             observer.update(message);
         }
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-        notifyObservers();
+    public void publishNews(String news) {
+        notifyObservers(news);
     }
 }
 
-class ConcreteObserver implements Observer {
+public class NewsSubscriber implements Observer {
     private String name;
 
-    public ConcreteObserver(String name) {
+    public NewsSubscriber(String name) {
         this.name = name;
     }
 
     @Override
     public void update(String message) {
-        System.out.println(name + " received message: " + message);
+        System.out.println(name + " received news: " + message);
     }
 }
 ```
 
-## 3. Builder Design Pattern
-
-The Builder pattern is used to construct complex objects step by step. It separates the construction of an object from its representation, allowing the same construction process to create different representations. Here's an example of implementing the Builder pattern in Java:
-
+Usage:
 ```java
-class Product {
-    private int id;
-    private String name;
-    private double price;
+NewsPublisher newsPublisher = new NewsPublisher();
 
-    public void setId(int id) {
-        this.id = id;
-    }
+NewsSubscriber subscriber1 = new NewsSubscriber("Subscriber 1");
+newsPublisher.addObserver(subscriber1);
 
-    public void setName(String name) {
-        this.name = name;
-    }
+NewsSubscriber subscriber2 = new NewsSubscriber("Subscriber 2");
+newsPublisher.addObserver(subscriber2);
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+newsPublisher.publishNews("Important breaking news!");
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                '}';
-    }
-}
-
-class ProductBuilder {
-    private Product product;
-
-    public ProductBuilder() {
-        this.product = new Product();
-    }
-
-    public ProductBuilder setId(int id) {
-        product.setId(id);
-        return this;
-    }
-
-    public ProductBuilder setName(String name) {
-        product.setName(name);
-        return this;
-    }
-
-    public ProductBuilder setPrice(double price) {
-        product.setPrice(price);
-        return this;
-    }
-
-    public Product build() {
-        return product;
-    }
-}
+// Output:
+// Subscriber 1 received news: Important breaking news!
+// Subscriber 2 received news: Important breaking news!
 ```
 
-## Conclusion
+These are just a few examples of the many design patterns that exist in Java. By understanding and applying design patterns, you can improve the structure and flexibility of your codebase. Start incorporating design patterns into your software development journey and unlock the power of reusable and maintainable code.
 
-Design patterns are powerful tools for solving common software development problems. By understanding and utilizing design patterns, developers can write code that is more structured, maintainable, and scalable. This blog post covered only a few design patterns in Java, and there are many more to explore. Happy coding!
+Happy coding!
