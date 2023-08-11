@@ -1,95 +1,104 @@
 ---
 title: "Creating a Simple Calculator in Python"
-date: 2021-04-23T10:00:00
+date: 2022-05-02T14:30:00
 draft: false
-description: "Learn how to create a simple calculator in Python with step-by-step instructions and source code examples."
+description: "Learn how to create a simple calculator program in Python."
 categories:
-- "Python Programming"
+- "Programming"
 tags:
-- "Calculator"
 - "Python"
 - "Beginner"
+- "Calculator"
 type: "featured"
 ---
 
 # Creating a Simple Calculator in Python
 
-In this tutorial, we will walk through the process of creating a simple calculator using Python. This project is a great way to practice your Python programming skills and understand the basics of handling user input, performing calculations, and displaying the output.
+In this tutorial, we will be creating a simple calculator program in Python. We will prompt the user to enter two numbers and choose an operation, then perform the calculation and display the result.
 
-## Prerequisites
+## Getting Started
 
-To follow along with this tutorial, you will need:
-
-- Python installed on your machine. You can download Python from the official website: [python.org](https://www.python.org/)
-- A text editor or integrated development environment (IDE) for writing Python code.
-
-Let's get started!
-
-## Step 1: User Input
-
-First, we need to get input from the user for the numbers and the operation they want to perform. We can use the `input()` function to prompt the user and store their input in variables. 
-
-Open your preferred text editor or IDE and create a new Python file. Name it `calculator.py` and start by adding the following code:
+First, let's create a new Python file called `calculator.py`.
 
 ```python
 # calculator.py
 
-# Get user input
+# Prompt the user to enter two numbers
 num1 = float(input("Enter the first number: "))
-operator = input("Enter an operator (+, -, *, /): ")
 num2 = float(input("Enter the second number: "))
-```
 
-In the above code, we use the `float()` function to convert the user input into floating-point numbers. This conversion will allow us to handle decimal numbers too.
+# Choose an operation
+print("Choose an operation:")
+print("1. Addition")
+print("2. Subtraction")
+print("3. Multiplication")
+print("4. Division")
 
-## Step 2: Perform Calculation
+operation = input("Enter the operation number: ")
 
-Next, we will perform the appropriate calculation based on the operator entered by the user. We will use conditional statements (`if`, `elif`, `else`) to determine the operation to be performed.
-
-Add the following code below the previous step:
-
-```python
-# Perform calculation
-result = 0
-
-if operator == "+":
+# Perform the calculation
+if operation == "1":
     result = num1 + num2
-elif operator == "-":
+    operator = "+"
+elif operation == "2":
     result = num1 - num2
-elif operator == "*":
+    operator = "-"
+elif operation == "3":
     result = num1 * num2
-elif operator == "/":
+    operator = "*"
+elif operation == "4":
     result = num1 / num2
+    operator = "/"
 else:
-    print("Invalid operator!")
+    print("Invalid operation number")
+    exit()
 
-print("Result:", result)
+# Display the result
+print(f"{num1} {operator} {num2} = {result}")
 ```
 
-In this code, we initialize the `result` variable to 0. Then, we check the value of the `operator` variable using conditional statements. If the operator is `+`, `−`, `*`, or `/`, we perform the corresponding operation and store the result in the `result` variable. If the operator is not one of these options, we display an error message.
+## Running the Program
 
-## Step 3: Run the Program
+To run the program, open your terminal or command prompt and navigate to the directory where `calculator.py` is located. Then, enter the following command:
 
-Save the `calculator.py` file and open your terminal or command prompt. Navigate to the directory where you saved the file and run the following command:
-
-```
+```bash
 python calculator.py
 ```
 
-You will see the program prompt you for the first number, operator, and second number. After entering the values, you will see the result displayed on the screen.
+You will be prompted to enter the first and second numbers, followed by the operation number. The program will then perform the calculation and display the result.
 
-Congratulations! You have successfully created a simple calculator in Python.
+## Example Output
+
+Here are some example outputs for different inputs:
+
+```
+Enter the first number: 5
+Enter the second number: 2
+Choose an operation:
+1. Addition
+2. Subtraction
+3. Multiplication
+4. Division
+Enter the operation number: 3
+5.0 * 2.0 = 10.0
+```
+
+```
+Enter the first number: 10
+Enter the second number: 7
+Choose an operation:
+1. Addition
+2. Subtraction
+3. Multiplication
+4. Division
+Enter the operation number: 2
+10.0 - 7.0 = 3.0
+```
 
 ## Conclusion
 
-In this tutorial, we learned how to create a simple calculator using Python. We covered getting user input, performing calculations based on the input, and displaying the result. You can further enhance this calculator by adding more functionality like handling errors, supporting additional operations, or creating a graphical user interface (GUI).
+Congratulations! You have successfully created a simple calculator program in Python. Feel free to experiment with different operations and numbers to further enhance the program.
 
-Feel free to explore and experiment with the code to make it your own. Happy coding!
+Remember, this is just a basic example to get you started. You can expand upon this program by adding error handling, more operations, or a user-friendly interface. The possibilities are endless!
 
-### Source Code
-
-You can find the complete source code for this tutorial on our [GitHub repository](https://github.com/your-repo/calculator.py).
-
-Remember to replace `your-repo` with your actual GitHub username or repository name.
-
-
+Happy coding!
