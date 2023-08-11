@@ -1,120 +1,229 @@
 --- 
 title: "Exploring Design Patterns in Java"
-date: 2022-04-10T10:00:00
+date: 2022-05-12T15:30:00
 draft: false
-description: "Learn about common design patterns and how to implement them in Java."
-categories:
-- "Programming"
-tags:
-- "Java"
-- "Design Patterns"
+description: "Learn about popular design patterns and their implementation in Java."
+categories: 
+  - "Programming"
+tags: 
+  - "Java"
+  - "Design Patterns"
 type: "featured"
---- 
+---
 
 # Exploring Design Patterns in Java
 
-Design patterns are proven solutions to common problems that arise during software development. They provide a structured approach to designing software systems, making them more maintainable, scalable, and flexible. In this blog post, we will explore some popular design patterns and see how they can be implemented in Java.
+Design patterns are reusable solutions to common problems that occur in software development. They provide proven concepts and strategies to solve these problems effectively. In this blog post, we will explore some of the most popular design patterns and demonstrate their implementation in Java.
 
-## 1. Singleton Pattern
+## Creational Patterns
 
-The Singleton pattern ensures that only one instance of a class is created and provides a global point of access to it. This is useful in scenarios where you want to limit the number of instances of a class, such as a database connection manager or a logging utility.
+### Factory Method
+
+The Factory Method pattern is used to create objects without specifying their exact class. Instead, a factory class handles object creation based on a specified interface or abstract class. Let's consider an example of a pizza store:
 
 ```java
-public class Singleton {
-    private static Singleton instance;
-    
-    private Singleton() {
-        // private constructor to prevent instantiation
+interface Pizza {
+    void prepare();
+    void bake();
+    void cut();
+    void box();
+}
+
+class MargheritaPizza implements Pizza {
+    // Implementation for Margherita Pizza
+}
+
+class PepperoniPizza implements Pizza {
+    // Implementation for Pepperoni Pizza
+}
+
+class PizzaStore {
+    public Pizza orderPizza(String type) {
+        Pizza pizza;
+
+        if (type.equals("Margherita")) {
+            pizza = new MargheritaPizza();
+        } else if (type.equals("Pepperoni")) {
+            pizza = new PepperoniPizza();
+        } else {
+            throw new IllegalArgumentException("Invalid pizza type.");
+        }
+
+        pizza.prepare();
+        pizza.bake();
+        pizza.cut();
+        pizza.box();
+
+        return pizza;
     }
-    
+}
+```
+
+In the example above, the `PizzaStore` acts as a factory that creates different types of pizzas based on user preference.
+
+### Singleton
+
+The Singleton pattern ensures that only one instance of a class can be created and provides a global point of access to it. Here's a simple implementation:
+
+```java
+class Singleton {
+    private static Singleton instance;
+
+    private Singleton() {
+        // Private constructor prevents direct instantiation
+    }
+
     public static Singleton getInstance() {
         if (instance == null) {
-            synchronized (Singleton.class) {
-                if (instance == null) {
-                    instance = new Singleton();
-                }
-            }
+            instance = new Singleton();
         }
         return instance;
     }
 }
 ```
 
-## 2. Observer Pattern
+## Structural Patterns
 
-The Observer pattern defines a one-to-many dependency between objects, where the subject notifies its observers about any state changes. This is useful when you want to achieve loose coupling between objects, allowing them to interact without having explicit knowledge of each other.
+### Adapter
+
+The Adapter pattern allows objects with incompatible interfaces to work together by wrapping them with a common interface. Consider an example of audio players:
 
 ```java
-public interface Observer {
-    void update();
+interface MediaPlayer {
+    void play(String audioType, String fileName);
 }
 
-public interface Subject {
+interface AdvancedMediaPlayer {
+    void playVlc(String fileName);
+    void playMp4(String fileName);
+}
+
+class VlcPlayer implements AdvancedMediaPlayer {
+    public void playVlc(String fileName) {
+        // VLC specific implementation
+    }
+
+    public void playMp4(String fileName) {
+        // Empty implementation
+    }
+}
+
+class Mp4Player implements AdvancedMediaPlayer {
+    public void playVlc(String fileName) {
+        // Empty implementation
+    }
+
+    public void playMp4(String fileName) {
+        // MP4 specific implementation
+    }
+}
+
+class MediaAdapter implements MediaPlayer {
+    private AdvancedMediaPlayer advancedMediaPlayer;
+
+    public MediaAdapter(String audioType) {
+        if (audioType.equals("vlc")) {
+            advancedMediaPlayer = new VlcPlayer();
+        } else if (audioType.equals("mp4")) {
+            advancedMediaPlayer = new Mp4Player();
+        }
+    }
+
+    public void play(String audioType, String fileName) {
+        if (audioType.equals("vlc")) {
+            advancedMediaPlayer.playVlc(fileName);
+        } else if (audioType.equals("mp4")) {
+            advancedMediaPlayer.playMp4(fileName);
+        }
+    }
+}
+
+class AudioPlayer implements MediaPlayer {
+    MediaAdapter mediaAdapter;
+
+    public void play(String audioType, String fileName) {
+        // Inbuilt support for mp3 files
+        if (audioType.equals("mp3")) {
+            System.out.println("Playing mp3 file: " + fileName);
+        }
+        // Use the MediaAdapter for other audio formats
+        else if (audioType.equals("vlc") || audioType.equals("mp4")) {
+            mediaAdapter = new MediaAdapter(audioType);
+            mediaAdapter.play(audioType, fileName);
+        } else {
+            System.out.println("Invalid media type: " + audioType);
+        }
+    }
+}
+```
+
+In the example above, the `MediaPlayer` interface provides a common interface for audio players (`AudioPlayer`) and the compatibility adapter (`MediaAdapter`) allows different audio formats to be played by the `AudioPlayer`.
+
+## Behavioral Patterns
+
+### Observer
+
+The Observer pattern defines a one-to-many dependency between objects, where changes in one object trigger updates in other dependent objects. Consider an example of a weather station:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+interface Observer {
+    void update(double temperature);
+}
+
+interface Subject {
     void registerObserver(Observer observer);
     void removeObserver(Observer observer);
     void notifyObservers();
 }
 
-public class ConcreteSubject implements Subject {
+class WeatherStation implements Subject {
     private List<Observer> observers = new ArrayList<>();
-    
-    @Override
+    private double temperature;
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+        notifyObservers();  // Notify all observers when temperature changes
+    }
+
     public void registerObserver(Observer observer) {
         observers.add(observer);
     }
-    
-    @Override
+
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
-    
-    @Override
+
     public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update();
+            observer.update(temperature);
         }
+    }
+}
+
+class User implements Observer {
+    private double temperature;
+
+    public void update(double temperature) {
+        this.temperature = temperature;
+        displayTemperature();
+    }
+
+    public void displayTemperature() {
+        System.out.println("Current temperature: " + temperature);
     }
 }
 ```
 
-## 3. Factory Pattern
-
-The Factory pattern provides an interface for creating objects, but lets subclasses decide which class to instantiate. This is useful when you want to encapsulate object creation and defer it to subclasses, allowing for flexible object creation.
-
-```java
-public interface Shape {
-    void draw();
-}
-
-public class Circle implements Shape {
-    @Override
-    public void draw() {
-        System.out.println("Drawing a circle");
-    }
-}
-
-public class Square implements Shape {
-    @Override
-    public void draw() {
-        System.out.println("Drawing a square");
-    }
-}
-
-public class ShapeFactory {
-    public static Shape createShape(String type) {
-        if (type.equalsIgnoreCase("circle")) {
-            return new Circle();
-        } else if (type.equalsIgnoreCase("square")) {
-            return new Square();
-        } else {
-            throw new IllegalArgumentException("Invalid shape type: " + type);
-        }
-    }
-}
-```
+In the example above, the `WeatherStation` acts as the subject and maintains a list of observers. When the temperature changes, it notifies all the observers, triggering their update.
 
 ## Conclusion
 
-Design patterns are powerful tools that can greatly enhance your software development process. They provide reusable solutions to commonly encountered problems, making your code more maintainable and extensible. In this blog post, we explored three popular design patterns (Singleton, Observer, and Factory) and saw how they can be implemented in Java.
+Design patterns provide a systematic approach to solving common software development problems. In this blog post, we explored some popular design patterns and their implementation in Java. These patterns can greatly improve the flexibility, maintainability, and reusability of your code. Understanding and applying design patterns will enhance your skillset as a Java developer and help you build robust software solutions.
 
-By leveraging these design patterns, you can write cleaner, more modular code that is easier to understand and maintain. So the next time you are faced with a software design challenge, consider applying one of these design patterns to solve it effectively. Happy coding!
+Remember, design patterns are not silver bullets but tools that should be used judiciously based on the specific requirements of your project. Happy coding!
+
+*References:*
+- Design Patterns: Elements of Reusable Object-Oriented Software by Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides
