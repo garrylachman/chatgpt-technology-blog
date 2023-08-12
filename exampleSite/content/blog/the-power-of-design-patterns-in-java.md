@@ -1,145 +1,153 @@
 --- 
 title: "The Power of Design Patterns in Java"
-date: 2021-07-15T09:00:00
+date: 2022-07-30T12:00:00
 draft: false
-description: "Learn about the importance of design patterns in Java and how they can improve your software development process."
+description: "Discover the importance of design patterns in Java programming and how they can enhance software development."
 categories:
-- "Java"
+- "Programming"
 tags:
+- "Java"
 - "Design Patterns"
-- "Java Programming"
-- "Software Development"
 type: "featured"
---- 
+---
 
-# The Power of Design Patterns in Java
+Design patterns play a crucial role in software development as they provide reusable solutions to common programming problems. In Java, developers can leverage various design patterns to enhance the structure and flexibility of their code. In this blog post, we will explore some popular design patterns in Java and illustrate their functionality through source code examples.
 
-Design patterns play a crucial role in the world of software development. They offer proven solutions to common programming problems, allowing developers to write more robust and maintainable code. Java, being a popular programming language, has an extensive collection of design patterns that can be utilized to enhance your software development process. In this article, we will explore the power of design patterns in Java with some practical examples.
+## Singleton Pattern
 
-## Creational Design Patterns
-
-Creational design patterns focus on object creation mechanisms. They provide flexible ways to create objects while avoiding tight coupling between classes. Let's take a look at an example of the Singleton pattern in Java:
+The Singleton pattern ensures that a class has only one instance and provides a global point of access to it. This pattern proves useful in scenarios where a single instance of a class needs to be shared across multiple parts of an application.
 
 ```java
 public class Singleton {
     private static Singleton instance;
     
     private Singleton() {
-        // Private constructor to prevent instantiation from outside the class
+        // Private constructor to prevent instantiation
     }
     
     public static Singleton getInstance() {
-        if (instance == null) {
+        if(instance == null) {
             instance = new Singleton();
         }
+        
         return instance;
     }
 }
 ```
 
-In the above example, the Singleton class ensures that only one instance of the class is created and provides global access to it. This pattern is useful in scenarios where you need to ensure a single point of access to a resource.
+## Observer Pattern
 
-## Structural Design Patterns
-
-Structural design patterns focus on the composition of classes and objects. They help in forming larger structures from individual objects, simplifying the overall system design. Let's consider an example of the Decorator pattern in Java:
+The Observer pattern establishes a one-to-many dependency between objects, where the state change of one object triggers updates in its dependent objects. This pattern allows decoupling between the objects, promoting maintainability and extensibility.
 
 ```java
-public interface Shape {
-    void draw();
-}
-
-public class Circle implements Shape {
-    @Override
-    public void draw() {
-        System.out.println("Drawing a Circle");
-    }
-}
-
-public abstract class ShapeDecorator implements Shape {
-    protected Shape decoratedShape;
-
-    public ShapeDecorator(Shape decoratedShape) {
-        this.decoratedShape = decoratedShape;
-    }
-
-    @Override
-    public void draw() {
-        decoratedShape.draw();
-    }
-}
-
-public class RedBorderDecorator extends ShapeDecorator {
-    public RedBorderDecorator(Shape decoratedShape) {
-        super(decoratedShape);
-    }
-
-    @Override
-    public void draw() {
-        decoratedShape.draw();
-        System.out.println("Adding red border");
-    }
-}
-```
-
-In the above example, the Decorator pattern allows us to add additional responsibilities to an object dynamically. Here, the RedBorderDecorator adds a red border to a shape without modifying the original shape implementation. This pattern is helpful when you want to extend the functionality of objects without subclassing.
-
-## Behavioral Design Patterns
-
-Behavioral design patterns focus on the interaction between objects and the distribution of behavior. They provide solutions for communication and coordination between objects. Let's explore an example of the Observer pattern in Java:
-
-```java
-import java.util.ArrayList;
-import java.util.List;
-
 public interface Observer {
-    void update(String message);
+    void update();
 }
 
 public class ConcreteObserver implements Observer {
-    private String name;
-
-    public ConcreteObserver(String name) {
-        this.name = name;
-    }
-
     @Override
-    public void update(String message) {
-        System.out.println(name + " received message: " + message);
+    public void update() {
+        // Perform desired actions upon update
     }
 }
 
 public interface Subject {
     void attach(Observer observer);
     void detach(Observer observer);
-    void notifyObservers(String message);
+    void notifyObservers();
 }
 
 public class ConcreteSubject implements Subject {
     private List<Observer> observers = new ArrayList<>();
-
+    
     @Override
     public void attach(Observer observer) {
         observers.add(observer);
     }
-
+    
     @Override
     public void detach(Observer observer) {
         observers.remove(observer);
     }
-
+    
     @Override
-    public void notifyObservers(String message) {
+    public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update(message);
+            observer.update();
         }
     }
 }
 ```
 
-In the above example, the Observer pattern establishes a one-to-many relationship between a subject and multiple observers. Whenever the subject changes, it notifies all registered observers. This pattern is useful when you want to provide notification to multiple objects about the state change.
+## Factory Method Pattern
 
-Using design patterns like these in your Java projects can greatly improve code readability, maintainability, and reusability. They offer proven solutions to recurring problems and enhance the overall software development process.
+The Factory Method pattern defines an interface for creating an object, allowing subclasses to decide which class to instantiate. This pattern promotes loose coupling, as the creation of objects is delegated to subclasses.
 
-In this article, we explored the power of design patterns in Java, covering creational, structural, and behavioral patterns. However, these are just a few examples from a wide range of design patterns available in Java. By leveraging these patterns effectively, you can write cleaner, more efficient, and easier-to-maintain code.
+```java
+public interface Product {
+    void doSomething();
+}
 
-Remember, design patterns should be used judiciously and in appropriate scenarios, ensuring that they add value to the project's goals and requirements.
+public class ConcreteProduct implements Product {
+    @Override
+    public void doSomething() {
+        // Perform desired actions
+    }
+}
+
+public interface Creator {
+    Product createProduct();
+}
+
+public class ConcreteCreator implements Creator {
+    @Override
+    public Product createProduct() {
+        return new ConcreteProduct();
+    }
+}
+```
+
+## Command Pattern
+
+The Command pattern encapsulates a request as an object, allowing users to parameterize clients with operations, queue or log requests, and support undoable operations. This pattern provides a way to decouple senders and receivers of a command.
+
+```java
+public interface Command {
+    void execute();
+}
+
+public class ConcreteCommand implements Command {
+    private Receiver receiver;
+    
+    public ConcreteCommand(Receiver receiver) {
+        this.receiver = receiver;
+    }
+    
+    @Override
+    public void execute() {
+        receiver.doSomething();
+    }
+}
+
+public class Receiver {
+    public void doSomething() {
+        // Perform desired actions
+    }
+}
+
+public class Invoker {
+    private Command command;
+    
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+    
+    public void executeCommand() {
+        command.execute();
+    }
+}
+```
+
+These are just a few examples of the many design patterns available in Java. By incorporating design patterns into your software development, you can enhance modularity, maintainability, and the overall structure of your code. Understanding and utilizing these patterns will empower you to write cleaner, more efficient, and flexible Java applications.
+
+Remember to stay updated on the latest design patterns and analyze your application requirements before deciding which pattern to use. Happy coding!
