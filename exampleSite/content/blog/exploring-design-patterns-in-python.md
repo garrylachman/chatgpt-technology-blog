@@ -1,100 +1,110 @@
----
+--- 
 title: "Exploring Design Patterns in Python"
-date: 2022-08-10T10:30:00
+date: 2022-01-28T09:00:00
 draft: false
-description: "Learn about design patterns and how they can be implemented in Python."
+description: "Learn about design patterns and their implementation in Python."
 categories:
-  - "Programming"
+- "Programming"
 tags:
-  - "Python"
-  - "Design Patterns"
+- "Python"
+- "Design Patterns"
+- "Software Development"
 type: "featured"
----
+--- 
 
 # Exploring Design Patterns in Python
 
-Design patterns are reusable solutions to common problems in software design. They provide a tried and tested approach to solving these problems and can significantly improve the quality, maintainability, and extensibility of your code.
-
-In this blog post, we will explore some popular design patterns and see how they can be implemented in Python. Let's dive in!
+Design patterns are reusable solutions to common problems that arise during software development. They provide a structured approach to solving recurring design problems, making code more maintainable and scalable. In this blog post, we will explore some popular design patterns and see how they can be implemented in Python.
 
 ## 1. Singleton Pattern
 
-The Singleton pattern ensures that a class has only one instance, while providing a global access point to that instance. This can be useful in scenarios where you want to limit the number of instances of a class, such as a database connection class.
+The Singleton pattern ensures that only one instance of a class exists throughout the application. It is useful when a single object needs to coordinate actions across the entire system. 
 
 ```python
-class DatabaseConnection:
-    _instance = None
+class Singleton:
+    __instance = None
 
     def __new__(cls):
-        if not cls._instance:
-            cls._instance = super().__new__(cls)
-        return cls._instance
+        if not cls.__instance:
+            cls.__instance = super().__new__(cls)
+        return cls.__instance
 
 # Usage
-db1 = DatabaseConnection()
-db2 = DatabaseConnection()
-
-assert db1 is db2  # Both instances refer to the same object
+instance1 = Singleton()
+instance2 = Singleton()
+print(instance1 is instance2)  # Output: True
 ```
 
 ## 2. Observer Pattern
 
-The Observer pattern allows multiple objects to be notified when a particular event occurs. It promotes loose coupling between the subject (the object being observed) and the observers (the objects that are notified).
+The Observer pattern defines a one-to-many dependency between objects, where the subject notifies its observers automatically of any state changes. 
 
 ```python
 class Subject:
     def __init__(self):
-        self._observers = []
+        self.__observers = []
 
     def attach(self, observer):
-        self._observers.append(observer)
+        self.__observers.append(observer)
 
     def detach(self, observer):
-        self._observers.remove(observer)
+        self.__observers.remove(observer)
 
-    def notify(self, event):
-        for observer in self._observers:
-            observer.update(event)
+    def notify(self):
+        for observer in self.__observers:
+            observer.update()
 
 class Observer:
-    def update(self, event):
-        print(f"Received event: {event}")
+    def update(self):
+        print("Observer received update.")
 
 # Usage
 subject = Subject()
 observer1 = Observer()
 observer2 = Observer()
-
 subject.attach(observer1)
 subject.attach(observer2)
-
-subject.notify("Some event")
+subject.notify()
 ```
 
-## 3. Iterator Pattern
+## 3. Factory Pattern
 
-The Iterator pattern provides a way to access the elements of an aggregate object sequentially without exposing its underlying implementation. It separates the iteration logic from the aggregate object, making it easier to iterate over different types of collections.
+The Factory pattern creates objects without exposing the instantiation logic to the client. It provides a common interface for creating various types of objects.
 
 ```python
-class MyCollection:
-    def __init__(self):
-        self._data = []
+from abc import ABC, abstractmethod
 
-    def add_item(self, item):
-        self._data.append(item)
+class Product(ABC):
+    @abstractmethod
+    def use(self):
+        pass
 
-    def __iter__(self):
-        return iter(self._data)
+class ConcreteProduct1(Product):
+    def use(self):
+        print("Using Concrete Product 1.")
+
+class ConcreteProduct2(Product):
+    def use(self):
+        print("Using Concrete Product 2.")
+
+class ProductFactory:
+    @staticmethod
+    def create_product(product_type: str) -> Product:
+        if product_type == "1":
+            return ConcreteProduct1()
+        elif product_type == "2":
+            return ConcreteProduct2()
 
 # Usage
-collection = MyCollection()
-collection.add_item("Item 1")
-collection.add_item("Item 2")
-
-for item in collection:
-    print(item)
+product_type = input("Enter product type (1 or 2): ")
+product = ProductFactory.create_product(product_type)
+product.use()
 ```
 
-These are just a few examples of design patterns that can be implemented in Python. Design patterns not only improve the structure and organization of your code but also provide a common language and set of solutions for common problems. Understanding and utilizing design patterns can elevate your programming skills and make your software more robust and maintainable.
+By utilizing design patterns, developers can adhere to best practices and improve the overall structure and readability of their code. It is important to choose the appropriate design pattern based on the problem at hand.
 
-We hope you found this article helpful in exploring design patterns in Python. Implementing these patterns can greatly enhance the quality and structure of your code. Happy coding!
+This blog post explored three common design patterns - Singleton, Observer, and Factory - and provided code examples in Python. Try implementing these patterns in your own projects to enhance your software development skills and create more robust applications.
+
+Remember, design patterns are not solutions to all problems, but they can definitely make your code more flexible, maintainable, and scalable.
+
+What design patterns have you found to be useful in your programming journey? Share in the comments below!
