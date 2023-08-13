@@ -1,33 +1,30 @@
 --- 
 title: "Exploring Design Patterns in Java"
-date: 2022-01-24T12:00:00
+date: 2022-07-15T10:00:00
 draft: false
-description: "Learn about common software design patterns and their implementation in Java."
+description: "Learn about the fundamentals of design patterns in Java and their practical implementations."
 categories: 
-  - "Programming"
+- "Programming"
 tags: 
-  - "Java"
-  - "Design Patterns"
-  - "Software Development"
+- "Java"
+- "Design Patterns"
 type: "featured"
 --- 
 
 # Exploring Design Patterns in Java
 
-Design patterns play a crucial role in software development as they provide proven solutions to common programming problems. In this article, we will explore some popular design patterns and provide their implementation examples in Java.
+Design patterns are essential tools for software developers to create efficient and maintainable code. They provide proven solutions to commonly occurring problems in software development. In this article, we will dive into some popular design patterns in Java and explore their practical implementations.
 
 ## 1. Singleton Pattern
 
-The Singleton pattern ensures that a class has only one instance and provides a global point of access to it. This pattern is useful when we want to restrict the instantiation of a class.
-
-Here's an example code snippet implementing the Singleton pattern in Java:
+The Singleton pattern restricts the instantiation of a class to a single object and provides global access to that instance. This pattern is useful when you require a single, shared resource throughout your application.
 
 ```java
 public class Singleton {
     private static Singleton instance;
 
     private Singleton() {
-        // Private constructor
+        // private constructor to prevent external instantiation
     }
 
     public static Singleton getInstance() {
@@ -41,25 +38,38 @@ public class Singleton {
 
 ## 2. Observer Pattern
 
-The Observer pattern establishes a one-to-many dependency between objects, where changes in one object (the subject) are notified to its dependent objects (observers). This pattern is useful for implementing event-driven systems.
-
-Here's an example code snippet implementing the Observer pattern in Java:
+The Observer pattern establishes a one-to-many relationship between Subject and Observer objects. When the state of the Subject changes, all its dependent Observers are notified and updated automatically.
 
 ```java
 import java.util.ArrayList;
 import java.util.List;
 
-public class Subject {
+interface Observer {
+    void update();
+}
+
+interface Subject {
+    void attach(Observer observer);
+
+    void detach(Observer observer);
+
+    void notifyObservers();
+}
+
+class ConcreteSubject implements Subject {
     private List<Observer> observers = new ArrayList<>();
 
+    @Override
     public void attach(Observer observer) {
         observers.add(observer);
     }
 
+    @Override
     public void detach(Observer observer) {
         observers.remove(observer);
     }
 
+    @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
             observer.update();
@@ -67,55 +77,66 @@ public class Subject {
     }
 }
 
-public interface Observer {
-    void update();
-}
-
-public class ConcreteObserver implements Observer {
+class ConcreteObserver implements Observer {
     @Override
     public void update() {
-        // Perform update logic
+        System.out.println("Observer updated!");
     }
 }
 ```
 
-## 3. Factory Pattern
+## 3. Factory Method Pattern
 
-The Factory pattern provides an interface for creating objects, but allows subclasses to decide which class to instantiate. This pattern is useful when we want to delegate the object creation logic to subclasses.
-
-Here's an example code snippet implementing the Factory pattern in Java:
+The Factory Method pattern provides an interface for creating objects, but allows subclasses to decide which class to instantiate. It is useful when you want to delegate object creation to subclasses or have conditional object creation logic.
 
 ```java
-public interface Shape {
-    void draw();
+interface Product {
+    void doSomething();
 }
 
-public class Rectangle implements Shape {
+class ConcreteProductA implements Product {
     @Override
-    public void draw() {
-        System.out.println("Drawing a rectangle.");
+    public void doSomething() {
+        System.out.println("Product A is doing something.");
     }
 }
 
-public class Circle implements Shape {
+class ConcreteProductB implements Product {
     @Override
-    public void draw() {
-        System.out.println("Drawing a circle.");
+    public void doSomething() {
+        System.out.println("Product B is doing something.");
     }
 }
 
-public class ShapeFactory {
-    public Shape createShape(String shapeType) {
-        if (shapeType.equals("rectangle")) {
-            return new Rectangle();
-        } else if (shapeType.equals("circle")) {
-            return new Circle();
-        }
-        return null;
+abstract class Creator {
+    public abstract Product createProduct();
+}
+
+class ConcreteCreatorA extends Creator {
+    @Override
+    public Product createProduct() {
+        return new ConcreteProductA();
+    }
+}
+
+class ConcreteCreatorB extends Creator {
+    @Override
+    public Product createProduct() {
+        return new ConcreteProductB();
     }
 }
 ```
 
-These are just a few examples of design patterns in Java. Understanding and utilizing these patterns can greatly improve the maintainability and flexibility of your software applications.
+## Conclusion
 
-I hope this article has provided you with a useful introduction to commonly used design patterns in Java. Happy coding!
+Design patterns are powerful tools that can greatly enhance software development. In this article, we explored a few essential design patterns in Java, including the Singleton, Observer, and Factory Method patterns. These patterns provide solutions to common programming challenges and promote code reusability and flexibility. Incorporating design patterns into your development process can result in more robust and maintainable software solutions.
+
+Remember to leverage design patterns when appropriate, as they can greatly improve the quality and efficiency of your Java code. Happy coding!
+
+What are your favorite design patterns in Java? Let us know in the comments below!
+
+References:
+
+- [Singleton Design Pattern in Java](https://www.baeldung.com/java-singleton)
+- [Observer Design Pattern in Java](https://www.baeldung.com/java-observer-pattern)
+- [Factory Method Design Pattern in Java](https://www.baeldung.com/java-factory-method-pattern)
