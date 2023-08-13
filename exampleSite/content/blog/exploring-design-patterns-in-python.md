@@ -1,120 +1,140 @@
---- 
+---
 title: "Exploring Design Patterns in Python"
-date: 2022-09-28T10:00:00
+date: 2021-07-15T12:00:00
 draft: false
-description: "Discover the power of design patterns in Python and how they can improve your software development projects."
+description: "A comprehensive guide to understanding and implementing design patterns in Python."
 categories:
-- "Python"
+- "Programming Languages"
 tags:
+- "Python"
 - "Design Patterns"
-- "Software Development"
-- "Python Programming"
 type: "featured"
 ---
 
 # Exploring Design Patterns in Python
 
-Design patterns are an essential aspect of software development as they provide proven solutions to common problems. In this article, we will explore some popular design patterns and their implementation in Python. 
+Design patterns are proven solutions to common software design problems. They provide a way to structure and organize code while promoting reusability and maintainability. In this blog post, we will discover different design patterns and explore their implementation in Python.
 
-## Singleton Pattern
-The Singleton pattern ensures that a class has only one instance and provides a global point of access to it. This can be useful in scenarios where you want to limit the number of instances of a class.
+## 1. Singleton
+
+The Singleton pattern ensures that a class has only one instance and provides a single point of access to it. This can be useful in scenarios where a class needs to maintain a single state or when there should be only one instance of a resource.
 
 ```python
-class Singleton:
-    _instance = None
+class SingletonClass:
+    __instance = None
 
     def __new__(cls):
-        if not cls._instance:
-            cls._instance = super().__new__(cls)
-        return cls._instance
-    
-# Usage
-s1 = Singleton()
-s2 = Singleton()
+        if cls.__instance is None:
+            cls.__instance = super().__new__(cls)
+        return cls.__instance
 
-print(s1 is s2)  # Output: True
+# Usage
+instance1 = SingletonClass()
+instance2 = SingletonClass()
+
+print(instance1 is instance2)  # Output: True
 ```
 
-## Factory Pattern
-The Factory pattern is a creational design pattern that provides an interface for creating objects. It encapsulates the object creation logic and allows the client code to create objects without knowing the specific class implementation.
+## 2. Factory Method
+
+The Factory Method pattern provides an interface for creating objects, but allows subclasses to decide which class to instantiate. This decouples the client code from the specific classes it creates, making it more flexible and extensible.
 
 ```python
-class Product:
-    def create(self) -> None:
-        raise NotImplementedError
-    
+from abc import ABC, abstractmethod
+
+class Product(ABC):
+    @abstractmethod
+    def operation(self):
+        pass
+
 class ConcreteProduct1(Product):
-    def create(self) -> None:
-        print("Creating ConcreteProduct1")
-        
+    def operation(self):
+        return "Concrete Product 1"
+
 class ConcreteProduct2(Product):
-    def create(self) -> None:
-        print("Creating ConcreteProduct2")
-        
-class ProductFactory:
-    @staticmethod
-    def create_product(product_type: str) -> Product:
-        if product_type == "product1":
-            return ConcreteProduct1()
-        elif product_type == "product2":
-            return ConcreteProduct2()
-        else:
-            raise ValueError("Invalid product type")
+    def operation(self):
+        return "Concrete Product 2"
+
+class Creator(ABC):
+    @abstractmethod
+    def factory_method(self):
+        pass
+
+    def some_operation(self):
+        product = self.factory_method()
+        return f"Creator: {product.operation()}"
+
+class ConcreteCreator1(Creator):
+    def factory_method(self):
+        return ConcreteProduct1()
+
+class ConcreteCreator2(Creator):
+    def factory_method(self):
+        return ConcreteProduct2()
 
 # Usage
-factory = ProductFactory()
-product1 = factory.create_product("product1")
-product1.create()  # Output: Creating ConcreteProduct1
+creator1 = ConcreteCreator1()
+creator2 = ConcreteCreator2()
 
-product2 = factory.create_product("product2")
-product2.create()  # Output: Creating ConcreteProduct2
+print(creator1.some_operation())  # Output: Creator: Concrete Product 1
+print(creator2.some_operation())  # Output: Creator: Concrete Product 2
 ```
 
-## Observer Pattern
-The Observer pattern defines a one-to-many relationship between objects, in which changes to one object trigger updates to all dependent objects. This pattern is useful when you want to decouple the subject and observer objects.
+## 3. Observer
+
+The Observer pattern defines a one-to-many dependency between objects, where a change in one object triggers updates to all its dependents. This enables loose coupling between objects and promotes separation of concerns.
 
 ```python
-class Observer:
-    def update(self, subject) -> None:
-        raise NotImplementedError
-    
-class Subject:
-    def __init__(self) -> None:
+from abc import ABC, abstractmethod
+
+class Subject(ABC):
+    def __init__(self):
         self._observers = []
-        
-    def attach(self, observer: Observer) -> None:
+
+    def attach(self, observer):
         self._observers.append(observer)
-        
-    def detach(self, observer: Observer) -> None:
+
+    def detach(self, observer):
         self._observers.remove(observer)
-        
-    def notify(self) -> None:
+
+    def notify(self):
         for observer in self._observers:
-            observer.update(self)
+            observer.update()
+
+class ConcreteSubject(Subject):
+    def get_state(self):
+        return "State change occurred"
+
+class Observer(ABC):
+    @abstractmethod
+    def update(self):
+        pass
+
+class ConcreteObserver1(Observer):
+    def update(self):
+        print("Concrete Observer 1 notified")
+
+class ConcreteObserver2(Observer):
+    def update(self):
+        print("Concrete Observer 2 notified")
 
 # Usage
-class ConcreteObserver(Observer):
-    def update(self, subject) -> None:
-        print(f"Received update from subject: {subject}")
+subject = ConcreteSubject()
+observer1 = ConcreteObserver1()
+observer2 = ConcreteObserver2()
 
-subject = Subject()
-observer = ConcreteObserver()
+subject.attach(observer1)
+subject.attach(observer2)
 
-subject.attach(observer)
-subject.notify()  # Output: Received update from subject: <__main__.Subject object at 0x7f26255d1af0>
-
-subject.detach(observer)
-subject.notify()  # No output
+subject.notify()
+# Output:
+# Concrete Observer 1 notified
+# Concrete Observer 2 notified
 ```
 
-These are just a few examples of design patterns that can be used in Python. By utilizing design patterns, you can enhance the structure, readability, and maintainability of your code, making it easier to collaborate with other developers and adapt to changing requirements.
+## Conclusion
 
-In conclusion, understanding and implementing design patterns in your Python projects can significantly contribute to the overall quality and effectiveness of your software development process. Take advantage of the power of design patterns and see your codebase thrive.
+Design patterns are powerful tools in a developer's arsenal. They offer elegant solutions to recurring design problems and facilitate code maintenance and extensibility. By leveraging design patterns, we can write cleaner, more maintainable code. In this blog post, we explored the Singleton, Factory Method, and Observer patterns, providing code examples in Python.
 
-Tell us in the comments which design patterns you find most useful in your programming journey!
+Design patterns can greatly enhance our software development skills, and it's worth exploring other patterns and their applications in different programming languages. Stay curious and keep experimenting!
 
-Don't forget to check out more informative articles on [our blog](https://www.example.com) to enhance your programming skills.
-
-References:
-- [Design Patterns - Gang of Four](https://en.wikipedia.org/wiki/Design_Patterns)
-- [Python Design Patterns - Real Python](https://realpython.com/design-patterns-python/)
